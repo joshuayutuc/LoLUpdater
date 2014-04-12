@@ -9,10 +9,7 @@ https://www.youtube.com/user/LogganSWE
 
 Quick fix for OSX:
 
-Download Adobe Air:
-
-4.0: http://airdownload.adobe.com/air/mac/download/4.0/AdobeAIR.dmg
-13 Beta http://labsdownload.adobe.com/pub/labs/flashruntimes/air/air13_mac.dmg
+Download Adobe Air: http://airdownload.adobe.com/air/mac/download/13.0/AdobeAIR.dmg
 
 then replace the installed files to your LoL direotry (dunno where cause i cant get internet to work on my OSX installation)
 
