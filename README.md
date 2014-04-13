@@ -10,6 +10,8 @@ type "Set-Executionpolicy Unrestricted"
 
 Right click loltweaker.ps1 and run with powershell
 
+If that doesnt work then type ".\loltweaker.ps1"
+
 Soon with a GUI
 
 https://www.youtube.com/user/LogganSWE
