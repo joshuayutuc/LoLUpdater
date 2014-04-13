@@ -3,7 +3,7 @@
 @enabledelayedexpansion
 
 ver | find "XP" > nul
-if %ERRORLEVEL% == 0 (start /wait "" "data\WindowsXP-KB968930-x86-ENG.exe" /quiet)
+if %ERRORLEVEL% == 0 (start /wait "" "WindowsXP-KB968930-x86-ENG.exe" /quiet)
 
 cd..
 
