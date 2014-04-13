@@ -1,4 +1,5 @@
-﻿Write-Host "Closing League of Legends..."
+﻿$host.ui.RawUI.WindowTitle = "LoLTweaker"
+Write-Host "Closing League of Legends..."
 stop-process -processname LoLLauncher
 stop-process -processname LoLClient
 
@@ -114,9 +115,9 @@ Read-host -prompt "LoLTweaks finished!"
 cls
 $message = "Do you want to patch or restore LoL to it's original state?"
 
-$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
+$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Patch"
 
-$no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
+$no = New-Object System.Management.Automation.Host.ChoiceDescription "&Restore"
 
 $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 
