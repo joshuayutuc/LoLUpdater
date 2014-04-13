@@ -6,13 +6,11 @@ Extract all the files into the LoL folder (works for Garena)
 
 run powershell.exe as admin
 
-type "Set-Executionpolicy Unrestricted"
+type "Set-Executionpolicy Unrestricted" (dont worry the policy will reset after a restart, otherwise you can typ "Set-Executionpolicy Restricted" when you are done)
 
 Right click loltweaker.ps1 and run with powershell
 
 If that doesnt work then type ".\loltweaker.ps1"
-
-Soon with a GUI
 
 https://www.youtube.com/user/LogganSWE
 
