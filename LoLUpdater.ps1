@@ -157,11 +157,11 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\proj
     }
     cls
 Write-Host "Cleaning up..."
-if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT -include .exe  
+if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins00[0-9].exe"))
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins00[0-9].exe" /VERYSILENT  
 }
-if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT -include .exe 
+if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins00[0-9].exe"))
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins00[0-9].exe" ] /VERYSILENT 
 }
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
@@ -212,8 +212,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUGl/raZsvBbOgVxeliKrGwDg4
-# oligggbUMIICOTCCAaagAwIBAgIQHGfHTd3It7NA0j8pmpieEDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU8e5NaEAu4Edc5t6HPjVuA7Xo
+# 0qGgggbUMIICOTCCAaagAwIBAgIQHGfHTd3It7NA0j8pmpieEDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMxMDMwMTRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwKIlvRbOHqzH
@@ -253,21 +253,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQHGfHTd3It7NA
 # 0j8pmpieEDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUXvSW9qUIWbCmntOiuPr1iVTdOCYwDQYJ
-# KoZIhvcNAQEBBQAEgYCQYFZ+qDigKkbGaqQ+vCx0rBQTwGn2a4HxtOLG+o7eLzna
-# NVPcSKG6otY6jWki0KqPyg95fBM6fyz6E9Yv/tXibbM0S5awGOTzhXY88UjotPg3
-# iQIBxjYp4wrs/m3aynWuHNA6SmWoGd2sgn7y98zVVJyuXQ/MZgNk6bgIZ2o9L6GC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUx0/2UabAl4V9NJvqVtcySDb88cUwDQYJ
+# KoZIhvcNAQEBBQAEgYALl/SY+VgYbOp7/VkAUxTOsz2aFtE/n1QFIqrb2JOFEm9M
+# yfV48NaKaJZ+Mh9vBOU3mRId5w7jw+zO8GPogyt2MoCaEu+F1rdrTY5egZ658IUu
+# 4uDWNCNQuxumJsXvpffg5W8Z7DvT0bpnAN/gfxp+qwGoek5EFP9+GnUGgvUqBqGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDMwMjNaMCMGCSqGSIb3DQEJBDEWBBTM
-# j+QIzdBGCi7amxf3QCFhe3ZpSTANBgkqhkiG9w0BAQEFAASCAQChip/G2SPSl16u
-# h5FJkCAeq7B9FZlYHOhKgk/GBoGp9enlfZIS2ZKO2GDEtnrg5kGCpCffKw49GQJz
-# b8Xq049be5ySmyyuKRa5oR6fyaXDF2x6CG+rjqGU/7DnDzHS6IP3uMfsRau3KXvM
-# WvTPt/KhzTUmBuaOLETJmnKNm+j8dM7TQneX5TX1gpFMLsslIKAgIBvLJYdr7i/w
-# 8dsQxmy3pGelOWp4kGsU5gnRauyy2ZP05Bsvdk80EzreCSKju8DxtALoBECWOqYB
-# iM01R9dAyhGkHXGDxO/gBnUdCkipFBr9OuV2gUPcK1Govmj3ZDTCdBpHjvfL42wW
-# CTbdTUCJ
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDM3MDRaMCMGCSqGSIb3DQEJBDEWBBTa
+# CPKH3xjjYjAtgWWBbtdP+AElKzANBgkqhkiG9w0BAQEFAASCAQBU78CEvFy1msEw
+# pCDUzOb03nvHaYuVpv7iHb0niOEZpxFXOFarfm2QqoaavNWUlp0nrvaZejhek0FB
+# OB0LIMzVstxugSY6+oBqfINa0tBsp9v5LJ2K45eEL0Arb+bw1BTAWtmvKzrTycSM
+# rSp0aRkWSOpexbgxYO7lv8oFU9PMuHNcuBvHTSNr5VS3F44ObJYsy+xYCN3uxWG+
+# eFIDKv+ALTvFeA1IEbL1TxNdKb9kSWLuQLhb2WZCkBQdheZKi5t9x6G8YWKMsMgB
+# xZdFCVOVnknnj713fOXBhaQbwdLfv0fX22ptxN/O6xHvOUNlpuL33g52s0BeIKPm
+# aKaFM/+n
 # SIG # End signature block
