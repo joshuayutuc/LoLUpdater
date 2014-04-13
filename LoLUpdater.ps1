@@ -96,7 +96,7 @@ Exit
 
 Function restore {
 Write-Host "Restoring..."
-Copy-Item "backup\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-ISet-AuthenticodeSignature C:\Users\Loggan\Documents\GitHub\LoLUpdater\lolupdater.ps1 @(Get-ChildItem cert:\CurrentUser\My -codesigning)[0] -timestampserver http://timestamp.comodoca.com/authenticodetem "backup\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -158,10 +158,10 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\proj
     cls
 Write-Host "Cleaning up..."
 if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT 
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT -include .exe  
 }
 if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT 
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT -include .exe 
 }
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
@@ -212,20 +212,20 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU/gCd7bXZBLp2hhqYKNsCxuxG
-# nNmgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUGl/raZsvBbOgVxeliKrGwDg4
+# oligggbUMIICOTCCAaagAwIBAgIQHGfHTd3It7NA0j8pmpieEDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTMwOTQ3NTBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA2PtBBa2VTkfb
-# Jal72nrPRcLXZ54rsDlk/Soc9olENJrXOyRX6ZnWi/YkvIx6NEbgBXO/zZ8RiLi6
-# jYkZdmfuG3JUOV8zRD3YxOIIQSuTX/sBRzwdnleFFcIYh3fhpleufkpFoR03NTOD
-# vBRtCE0uXwjqOLBTc63xite3kqtWUNsCAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTMxMDMwMTRaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwKIlvRbOHqzH
+# kTiyCuzoFVxHwdDFeF2M2C6YjqtUHthBFViKDMlU9gtFEZoG/YZnrTntJWzn+6su
+# 08kQVFs7MyAlLAukJ8VtlnJWzVYuwhSAPqYrRGutx9hVkbpHSS2rqD1nrKZrgik4
+# wocOst8n0ZW8ZMUvnnwASfazDneJTk0CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ5nF8jrl4ebXAMucz3ni5waEuMCwxKjAoBgNVBAMT
 # IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQq5c5HtmNCa9OCxcv
-# EPrkxzAJBgUrDgMCHQUAA4GBALMGY6jTJspUsdCOdzv5OdtFijI0kqNPD5hqlD9w
-# BA3yiObySuUFgdP5PLb2JB5/Y7WmmRW9/oT3saY5cP6/0+azrIEQ10S8R9STac/f
-# A0Dzi2qPe1YuGki9wEhEPs50K020GFOYUN8QTUfg3irGbnVzI7jDNpJBGZ2LpU6t
-# L7JGMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# EPrkxzAJBgUrDgMCHQUAA4GBADJ8mDhJ69u1U7ueL0U7d4RmEwpiAzDc5QLPgB/i
+# aKAbzMrHRBexpVZGZTOrlAVhI6M7fSdjvkzhEqGewR1XjTNvkQBmrWNsyhu0Nec8
+# AuvNxx0n74SJpdBdDfT0LKS4+lA0EorE7mM1hwoAy6cftKXqWlFPsiWWhP8pW6ce
+# dCVwMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -250,24 +250,24 @@ switch ($result)
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQpHN39fwu/o1I
-# hgtAQS8FnzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQHGfHTd3It7NA
+# 0j8pmpieEDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU/0OvFbLmb7iZ3nfirISE/XmlJKMwDQYJ
-# KoZIhvcNAQEBBQAEgYAWnfoCEo9hXYbXaZmBYR4lUWOxdeJI8QW2yXk4HFcRzPWn
-# U3V1r6iA7lCYywA5qqCwbpJzmaUIGR7Ac8aikUkhpl1KHkePWkdjzQSW0tYm8FqE
-# VLDp6HvkAYsmQk2O6g60u42kEwFT/LkwNsXALztNNTUEGM10jNrei/c8BiTv1KGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUXvSW9qUIWbCmntOiuPr1iVTdOCYwDQYJ
+# KoZIhvcNAQEBBQAEgYCQYFZ+qDigKkbGaqQ+vCx0rBQTwGn2a4HxtOLG+o7eLzna
+# NVPcSKG6otY6jWki0KqPyg95fBM6fyz6E9Yv/tXibbM0S5awGOTzhXY88UjotPg3
+# iQIBxjYp4wrs/m3aynWuHNA6SmWoGd2sgn7y98zVVJyuXQ/MZgNk6bgIZ2o9L6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDI0NTJaMCMGCSqGSIb3DQEJBDEWBBRR
-# LsHZjsXda14rCf4FMKChqAg82jANBgkqhkiG9w0BAQEFAASCAQBc/Ls9wUWjX/kZ
-# dr0tQTBkywYbiC+Gf4nW5G+xgI6CWNaBMTEFhUlLSLrO6I4x9zmvWynhTUoAgjm0
-# WFEzHk/tI2dJ+BETpNedTs9OZ7wk8DTGYFdyk3fnxdw0PDl10J7icEVQlkCA4wpD
-# 3tNrnXA8Ufi5OvFG+GOI5cbqL/IR1dRk0bKukqsOr1dzhrwavr5fN5UzvavHE7nU
-# reVbelW9JVzaQlVofBXaYi0GRNMPld8qrnuz6vPDLdYmmUYAosPXTfFWp9e5WsY0
-# DIKOiDzJCGYnOlaWbpnPpTAg/S+V9ilpctdSBWf2Pdygxhn71ndNaJswyKNwEFIu
-# Y7rxMww3
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDMwMjNaMCMGCSqGSIb3DQEJBDEWBBTM
+# j+QIzdBGCi7amxf3QCFhe3ZpSTANBgkqhkiG9w0BAQEFAASCAQChip/G2SPSl16u
+# h5FJkCAeq7B9FZlYHOhKgk/GBoGp9enlfZIS2ZKO2GDEtnrg5kGCpCffKw49GQJz
+# b8Xq049be5ySmyyuKRa5oR6fyaXDF2x6CG+rjqGU/7DnDzHS6IP3uMfsRau3KXvM
+# WvTPt/KhzTUmBuaOLETJmnKNm+j8dM7TQneX5TX1gpFMLsslIKAgIBvLJYdr7i/w
+# 8dsQxmy3pGelOWp4kGsU5gnRauyy2ZP05Bsvdk80EzreCSKju8DxtALoBECWOqYB
+# iM01R9dAyhGkHXGDxO/gBnUdCkipFBr9OuV2gUPcK1Govmj3ZDTCdBpHjvfL42wW
+# CTbdTUCJ
 # SIG # End signature block
