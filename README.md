@@ -1,6 +1,8 @@
 LoLUpdater
 ==========
 
+Just put in LoL folder and run.
+
 Soon with a GUI
 
 LoLUpdater OSX
