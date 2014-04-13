@@ -1,4 +1,11 @@
-﻿pop-location
+﻿$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
+$ErrorActionPreference = "SilentlyContinue"
+
+$sLogPath = "$dir"
+$sLogName = "errorlog.log"
+$sLogFile = $sLogPath + "\" + $sLogName
+
+pop-location
 push-location "RADS\solutions\lol_game_client_sln\releases"
 $sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
@@ -25,6 +32,58 @@ Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backu
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
 start-process .\data\dxwebsetup.exe /q
 
+Function Log-Start{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LogName, [Parameter(Mandatory=$true)][string]$ScriptVersion)
+Process{
+$sFullPath = $LogPath + "\" + $LogName
+If((Test-Path -Path $sFullPath)){
+Remove-Item -Path $sFullPath -Force
+}
+New-Item -Path $LogPath -Name $LogName –ItemType File
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath "Started processing at [$([DateTime]::Now)]."
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath ""
+Add-Content $sFullPath "Running script version [$ScriptVersion]."
+Add-Content $sFullPath ""
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath ""
+}
+}
+
+Function Log-Error{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$ErrorDesc, [Parameter(Mandatory=$true)][boolean]$ExitGracefully)
+Process{
+Add-Content -Path $LogPath -Value "Error: An error has occurred [$ErrorDesc]."
+
+If ($ExitGracefully -eq $True){
+Log-Finish -LogPath $LogPath
+Break
+}
+}
+}
+ 
+Function Log-Finish{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$false)][string]$NoExit)
+Process{
+Add-Content $LogPath ""
+Add-Content $LogPath "***************************************************************************************************"
+Add-Content $LogPath "Finished processing at [$([DateTime]::Now)]."
+Add-Content $LogPath "***************************************************************************************************"
+
+
+If(!($NoExit) -or ($NoExit -eq $False)){
+Exit
+}
+}
+}
+
 Function restore {
 Write-Host "Restoring..."
 Copy-ISet-AuthenticodeSignature C:\Users\Loggan\Documents\GitHub\LoLUpdater\lolupdater.ps1 @(Get-ChildItem cert:\CurrentUser\My -codesigning)[0] -timestampserver http://timestamp.comodoca.com/authenticodetem "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -44,6 +103,9 @@ exit
 }
 
 Function patch{
+Param()
+Process{
+Try{
 Log-Start -LogPath $sLogPath -LogName $sLogName -ScriptVersion $sScriptVersion
 Write-Host "Closing League of Legends..."
 stop-process -processname LoLLauncher
@@ -110,6 +172,14 @@ Write-Host "#######  ####  #######    #    #    # ###### #    # #    #  ####"
 Write-Host ""
 Read-host -prompt "LoLTweaks finished!"
 
+Log-Finish -LogPath $sLogFile
+}
+Catch{
+$sError = $Error[0] | Out-String
+Log-Error -LogPath $sLogFile -ErrorDesc $sError -ExitGracefully $True
+Break
+}
+}
 }
 
 
