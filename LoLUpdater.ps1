@@ -158,10 +158,10 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\proj
     cls
 Write-Host "Cleaning up..."
 if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /silent
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT 
 }
 if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /silent
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /VERYSILENT 
 }
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
@@ -172,13 +172,13 @@ if ((Test-Path -path $key\uninst.exe))
 Write-Host "Starting LoL-Launcher..."
 start-process lol.launcher.exe
 cls
-Write-Host "#              #       #######"                                   
-Write-Host "#        ####  #          #    #    # ######   ##   #    #  #### "
-Write-Host "#       #    # #          #    #    # #       #  #  #   #  #    " 
-Write-Host "#       #    # #          #    #    # #####  #    # ####    #### "
-Write-Host "#       #    # #          #    # ## # #      ###### #  #        #"
-Write-Host "#       #    # #          #    ##  ## #      #    # #   #  #    #"
-Write-Host "#######  ####  #######    #    #    # ###### #    # #    #  ####"
+Write-Host "#              #       #######                                    "
+Write-Host "#        ####  #          #    #    # ######   ##   #    #  ####  "
+Write-Host "#       #    # #          #    #    # #       #  #  #   #  #      "
+Write-Host "#       #    # #          #    #    # #####  #    # ####    ####  "
+Write-Host "#       #    # #          #    # ## # #      ###### #  #        # "
+Write-Host "#       #    # #          #    ##  ## #      #    # #   #  #    # "
+Write-Host "#######  ####  #######    #    #    # ###### #    # #    #  ####  "
 Write-Host ""
 Read-host -prompt "LoLTweaks finished!"
 
@@ -212,8 +212,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU7Ef1ZMxEdhAkKk0biW7Lcbvy
-# 1WWgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU/gCd7bXZBLp2hhqYKNsCxuxG
+# nNmgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwOTQ3NTBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA2PtBBa2VTkfb
@@ -253,21 +253,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQpHN39fwu/o1I
 # hgtAQS8FnzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU6iSytLXh3uV/8x8ilIM0FjpP22EwDQYJ
-# KoZIhvcNAQEBBQAEgYCedsnOi8uz+yAPiTQltKhNEwjNL3XoRcb26CVIVQ37AnmN
-# 7ZZhlEWRJiQoEAyKKwa2BQr7QJhdQMvRF+EKahigQjzl11tWO7CIuWI0jHIC+D+h
-# BfLdJoGC3AqsXxwxeehbWnAnFGg7PQ1T3bJcBpQ/W90pLiYPzbu1UMwOXMWOGaGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU/0OvFbLmb7iZ3nfirISE/XmlJKMwDQYJ
+# KoZIhvcNAQEBBQAEgYAWnfoCEo9hXYbXaZmBYR4lUWOxdeJI8QW2yXk4HFcRzPWn
+# U3V1r6iA7lCYywA5qqCwbpJzmaUIGR7Ac8aikUkhpl1KHkePWkdjzQSW0tYm8FqE
+# VLDp6HvkAYsmQk2O6g60u42kEwFT/LkwNsXALztNNTUEGM10jNrei/c8BiTv1KGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDE4NThaMCMGCSqGSIb3DQEJBDEWBBRE
-# ySqSQbQC7Tmf5CiPdc/HWLpoEzANBgkqhkiG9w0BAQEFAASCAQCuN6Ed8d1Nn+FH
-# CZY5U0vr+f+MkzQe32xuYEpiuAHvhFv7McGAE7b2QPMw/nUqqmrLF308eqNBQdBS
-# fu5cEMRTbVROgrUy7xg9EV2RyjcS4d8KynSQdy/0qoyBpY6jgKBX07wvJyIkFvDW
-# qQP8zfz5hvQ+67A6XDFLIhsSjRo6DSJ3Y/OR2oUZ9uq9ULibX40n0QH/IJXAj4K1
-# R8EBUcIe69lr8HhutBgU3EI0y8w0RJR8Ec4JGRoRP1ork85pDHwgr7AM2FoXJ/dh
-# 9pOyJsacmw3RVrOgAP+l2qXIKDOCqqwQR7omCdoxUwWZO7ZAym54cyz1DEf8xOI7
-# B04M2r/L
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDI0NTJaMCMGCSqGSIb3DQEJBDEWBBRR
+# LsHZjsXda14rCf4FMKChqAg82jANBgkqhkiG9w0BAQEFAASCAQBc/Ls9wUWjX/kZ
+# dr0tQTBkywYbiC+Gf4nW5G+xgI6CWNaBMTEFhUlLSLrO6I4x9zmvWynhTUoAgjm0
+# WFEzHk/tI2dJ+BETpNedTs9OZ7wk8DTGYFdyk3fnxdw0PDl10J7icEVQlkCA4wpD
+# 3tNrnXA8Ufi5OvFG+GOI5cbqL/IR1dRk0bKukqsOr1dzhrwavr5fN5UzvavHE7nU
+# reVbelW9JVzaQlVofBXaYi0GRNMPld8qrnuz6vPDLdYmmUYAosPXTfFWp9e5WsY0
+# DIKOiDzJCGYnOlaWbpnPpTAg/S+V9ilpctdSBWf2Pdygxhn71ndNaJswyKNwEFIu
+# Y7rxMww3
 # SIG # End signature block
