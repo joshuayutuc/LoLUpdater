@@ -66,15 +66,7 @@ Exit 1
 
 $dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 New-Item -ItemType directory -Path $dir\Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" Backup
+
 $ErrorActionPreference = "SilentlyContinue"
 
 $sScriptVersion = "1.0"
@@ -111,14 +103,24 @@ push-location "$dir\RADS\projects\lol_air_client\releases"
 $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 cd $dir
+Write-Host "Backing up..."
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
 cls
 Write-Host "Downloading files..."
 import-module bitstransfer
 Start-BitsTransfer http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012_Setup.exe
 cls
 Write-Host "Copying files..."
-start-process data\dxwebsetup.exe /q
-start-process Cg-3.1_April2012_Setup.exe /silent -wait
+start-process .\data\dxwebsetup.exe /q
+start-process .\Cg-3.1_April2012_Setup.exe /silent -wait
 Copy-Item "data\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -135,10 +137,9 @@ Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RA
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
-if ((Test-Path -path $key\uninst.exe))
-{start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe" /silent
-}
-        
+if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"))
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe" /silent
+} 
     }
     else
     {
@@ -148,10 +149,9 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solu
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
-if ((Test-Path -path $key\uninst.exe))
-{start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe" /silent
-}
-
+if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"))
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe" /silent
+} 
     }
     cls
 Write-Host "Uninstalling PMB..."
@@ -159,7 +159,7 @@ Write-Host "Uninstalling PMB..."
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory" 
 
 if ((Test-Path -path $key\uninst.exe))
-{ start-process "$key\uninst.exe "
+{ start-process "$key\uninst.exe"
 }
 
 
@@ -230,20 +230,20 @@ patch
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUwD10iJSCM0kkLDiNwdT6OpWj
-# QFSgggbUMIICOTCCAaagAwIBAgIQv1RyTowzq4RB1+dREMrv1jAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUFz93io/58RCA/jTVHZ9jpQPY
+# 1NKgggbUMIICOTCCAaagAwIBAgIQjJGD6+apCJVItXMz4UkJGzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTMwMjQ1MDVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAphAas5fefSJP
-# cvdszx/Din1IzAQ6O2bXksHie3OATxgv16/OFYo3uzT6Jg5tOwSgb1m5ftYMZF1P
-# ru0SCWjd17UmJUGN0+oFG5i95CM9ohu9qP7SB8BTj21ca6sxcpXow/nYJ3gIwWtY
-# E2M4xKj7LbMzR87EJtQY6ICUrSyZTqECAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTMwMzM1MzNaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAlvbiHTmxkN0z
+# ekqAMmGRXpRJTvSZLVl7IbO6aHormhV1suf6zm0EAJuJMQ8XzTGhYvDGNe7D0rok
+# cazCATn3FhXwMft+1++SqUf6a0VpQuxJJvsXXnJhodiMvqy07+R+mlbi8q6MHidJ
+# WiFnmZHtleBJmESnRKOU9LKS9FSr/QMCAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ5nF8jrl4ebXAMucz3ni5waEuMCwxKjAoBgNVBAMT
-# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQQi98cagnAJNBOKt4
-# CHSVbzAJBgUrDgMCHQUAA4GBAHy/+zKPtNm0MjezUcaei2DEokLMH1vfZq/8gjl8
-# MGvf9dGLxbhfv9Z23vR/kOfwZhBNk3by+ACTsEaqSlFOX5ShzbBbkUQ6mHnt+UA5
-# TtGLq6Wu8RyVBlBMK/vSQuTD5jvrN/sduHKp0A8MqbRClZNR+/bSq3+lTqwv48+B
-# WcZjMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQiEhJAEj98ZBD0Zp1
+# n3PvEjAJBgUrDgMCHQUAA4GBABiUheI17Tsz/ufZhf2ODw1XQKMRV+EIG/ivUesy
+# HoOo3L5QIVxablecfMk31WJaaGpjWi3kMVfIgqiGnVl8LNG/T7WgeFWueXb2PNug
+# Hr3R8gONbpcku605WBcgtAj7ZW76YUhqWqnDuyrv7Px5frTxotDGddKHnA88KhNT
+# 6jz+MIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -268,24 +268,24 @@ patch
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQv1RyTowzq4RB
-# 1+dREMrv1jAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQjJGD6+apCJVI
+# tXMz4UkJGzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUOTLNutp+aTYDKkyeZaPZ10JCXEswDQYJ
-# KoZIhvcNAQEBBQAEgYA9x6s3dzHk9Zb/zSYv53TYWgZv5qbVV+6PkSwErCL7BcXf
-# NLkL4/Y1728vN5XUyzGBdob2UcnynpR5dAjMC+NvcIlj6drpCYKCOqfk/x3w8GW7
-# 1olKCb5eBb/QRfBfw3YF0VNSJO+EP8FQL/GTM2J4YOfviCu0Kld9MqIFgvqBOqGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU/7GrONMHpi4Zcg5Z0tYKzdLbugUwDQYJ
+# KoZIhvcNAQEBBQAEgYA3kn0MvUYIrhll81z3siWoYgu5HBM5QD09Qpjv4uXA0Wzt
+# 3rXY1s8vG6vtvYyMRlN0Bwv5GaxDZYbQvz7r1384zlm9hpxTo+94IXkBNCYs8rI2
+# ajJvgd+6noiFxEZsBY6PKTLNPFyv6oeIwdz47Oe4qaueBZUvLeQpWx+d7EA07KGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwMjQ1MjBaMCMGCSqGSIb3DQEJBDEWBBSD
-# kVgj4/ty4JCP5kJWajnJJNyP7jANBgkqhkiG9w0BAQEFAASCAQCwGYK+vPT2peQ0
-# Fud82srjjMvjL3oPw5NHC6UGOvnEDxA0mRAgt7aO64zZOJx4vTSLlu2/8zCiLp0J
-# BU5qoIcnjrUX+Nh2JqG42m7GlR4AoWsYc16kTkXdV15IECuwqR02Zv7sGpJGbYyt
-# Lj0bbPhWWY7YQjjoWl2252rUMBBLTueD1DC7z2UbxHPuVxyJco8+IyS49JAmcDp0
-# iDiGELIn9Xv2ZG8ArDTSSYnTrnlcfviZN0FBpls8l4Vdc5k7XsnTMfOQLaW7wB5H
-# Ic5hJQOW/7lya5QLpnUyJnbSgawnZlLw1cHaVaNVVFZu1xzPWeKsZo43zGsQPg3S
-# ECnFbDcV
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwMzM1NDBaMCMGCSqGSIb3DQEJBDEWBBRS
+# 1MlBMa4QAFi2/WR0/zh+Tr5TmjANBgkqhkiG9w0BAQEFAASCAQAp4RtHvTjHVKk0
+# KH+PyeSATret2bywZgOh9vPXVGnNaJt2ps4stHjhUPYmRIZrc+EGRddbHn/iOjP/
+# jLxTbG4OOb1PdpOY4W0X7AfOOlGRgt0ndCUE9arxLo0l2tMnGx7Ho4+mCdO1nWvP
+# aaP8WcvWG2M/1FTtH98T6etHl1U+GdROnCwZKjQkgrRt3xH729mU7f0WSLyIWmtn
+# TlRywH5fL/q3UfMXTYLjR6hT6sTmLX35ToIB4vX9rKtPaL8G1En6RiilS04gwO6s
+# eRHA5Bbh5V/oRyMQLE7zwFaen3Vvq3DLxe3Yckn7toQarAfRMNF4hdv/SZYpQU13
+# epR3BhET
 # SIG # End signature block
