@@ -1,4 +1,5 @@
-﻿Function Log-Start{
+﻿$title = "LoLTweaker"
+Function Log-Start{
 
 [CmdletBinding()]
 Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LogName, [Parameter(Mandatory=$true)][string]$ScriptVersion)
@@ -222,7 +223,7 @@ $sLogFile = $sLogPath + "\" + $sLogName
 New-Item -ItemType directory -Path $dir\Backup
 
 
-$title = "LoLTweaker"
+cls
 $message = "Do you want to patch or restore?"
 
 $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
@@ -240,13 +241,11 @@ switch ($result)
         1 {restore}
     }
 
-
-
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUmcXPidl+WkgO1tPbr/9cKHh6
-# 37egggbUMIICOTCCAaagAwIBAgIQ2OMCN8GNGYxJuVppSv8vsTAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzHF/hCeLH5f8aC5Fpq07/Hc3
+# 8I6gggbUMIICOTCCAaagAwIBAgIQ2OMCN8GNGYxJuVppSv8vsTAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNDI0NDlaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwY2kr8t0tefl
@@ -286,21 +285,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQ2OMCN8GNGYxJ
 # uVppSv8vsTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUDdj5LO/Rqzfs2tdjX/jbM88tcZQwDQYJ
-# KoZIhvcNAQEBBQAEgYAIC+XUmjHlJnvU6yVgupy0cFCeBW8qGArwW3KgwCYI3MmA
-# SOrKF5QRr/6iNeFOp4ifmh7tIDALdYifyb2TXZcWKWahl6l5GB7V1OsJG5YiW21/
-# Vu3v9oTFwtUkSa8zZ52FWFBlRaMF/xcGIsUx7SD1+3jZl2dTY/NTQZceJdXEMaGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUFdOl5dstdX0S+3+zr20HEbotoYMwDQYJ
+# KoZIhvcNAQEBBQAEgYBx7h4h+5nDRx5YGb1QpVUrtnmLhom00HJuAvM+C4aLvKgZ
+# QhtaCAzoxaJyjBu7VnLiEWiqZ6TW5mpSPQ9tYiDvg4uuKdYBI/NHs7VleR7dhY0U
+# 4nEBmrgCxBjcaXMdm/TTvlQtfh874aEhxRPeqPKVSUlQ63vqnszSvBl2QZwWoKGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDMxNTNaMCMGCSqGSIb3DQEJBDEWBBS8
-# eU0ngzmzrRAigYFyX6cWUDHvVzANBgkqhkiG9w0BAQEFAASCAQAf4ryaJpcNmLRx
-# UiAtA5z6UiZGePEx92EgCsxJuHwoaAf1WidT4bor4bv5ccYQ4rOALY8KoC/1OTeN
-# mad5nopVdrefyJK2to8G6kk19nRURYWXgLUujdZV36n863iWn7mzZB6YT9OY1xtT
-# 8nkaLxz0VCleycsdfEBbPZu0HTlYrB6FWf1t/GYKSXcjiD631Otx/OW0FaDaWJAK
-# PBdeT6a+kE0lyPIXEeop/RZjXlChpnUOeRnywhL/49fzt9X31KVWYrEfc1Lcqc8O
-# yAhHPrtYJ86bbhBLGzLkKJrVnSubqBj11sFFxzFQxV3JRAasYId2Yp87eyasJT+i
-# CcCXoSdX
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDM1MDVaMCMGCSqGSIb3DQEJBDEWBBSl
+# g3ri5Q53Nebku1ocaTCujW3AgDANBgkqhkiG9w0BAQEFAASCAQA2gk8qYbXf+phH
+# B7K+UGvxtp9od9+5I2JH1+WHLYz5eKFUPLADZyam9oKEkxHJzfK3gQ77R7pVipfH
+# BtNfASV5RwKNq8CUWyPBd8IYrQL+zqbN0TZ54hIgADxUVoZ1mxD27MJynuAAwoQ+
+# zHWRMb6zPKPpOlx3TfRNT2Wrxvs7SkzO+ukelhM1VWY9G/ZKHNsZqqtQkp6N5Vgr
+# Hppaecg0HMHqD+RGRtFN4VpRlM0eJC7YDDYBjJe4gzRn3uYFBZV7yoYtrrz+jYBw
+# 385g2AEWbyCiCUTV4suuCZdLN4h29jbUJwY0LqHqqDYi4LQfDnCjHgsCyS6mLQyj
+# ykHAAcKl
 # SIG # End signature block
