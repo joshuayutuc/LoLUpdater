@@ -9,14 +9,14 @@ if %ERRORLEVEL% == 0 (start /wait "" "data\WindowsXP-KB968930-x86-ENG.exe" /quie
 
 
 if %PROCESSOR_ARCHITECTURE%==x86 (
-C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell set-executionpolicy AllSigned >nul
+C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell set-executionpolicy Remotesigned >nul
 ) else (
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell set-executionpolicy AllSigned >nul
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell set-executionpolicy RemoteSigned >nul
 )
 cd..
 
 if %PROCESSOR_ARCHITECTURE%==x86 (
-C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -Executionpolicy Bypass -File lolupdater.ps1
+C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -File lolupdater.ps1
 ) else (
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Executionpolicy Bypass -File lolupdater.ps1
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File lolupdater.ps1
 )
