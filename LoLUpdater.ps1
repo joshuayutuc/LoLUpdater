@@ -1,4 +1,16 @@
 ﻿$title = "LoLTweaker"
+Write-Host "Backing up..."
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
+Write-Host "Backed up..."
+
 Function Log-Start{
 
 [CmdletBinding()]
@@ -76,17 +88,18 @@ Exit
 }
 
 Function backup {
-Write-Host "Backing up..."
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
-Read-host -prompt "LoLTweaks finished!"
+Copy-Item "backup\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\Adobe Air.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "backup\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "backup\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 }
 
 Function patch{
@@ -224,12 +237,12 @@ New-Item -ItemType directory -Path $dir\Backup
 
 
 cls
-$message = "Do you want to patch or restore?"
+$message = "Do you want to patch or restore backups?"
 
 $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
-
+    "Patches the LoL Game"
 $no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
-    "Retains all the files in the folder."
+    "Restores LoL to its original state"
 
 $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 
@@ -244,8 +257,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUzHF/hCeLH5f8aC5Fpq07/Hc3
-# 8I6gggbUMIICOTCCAaagAwIBAgIQ2OMCN8GNGYxJuVppSv8vsTAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUc/8TDmivBLkHgZSPoEqH/onZ
+# tGygggbUMIICOTCCAaagAwIBAgIQ2OMCN8GNGYxJuVppSv8vsTAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNDI0NDlaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwY2kr8t0tefl
@@ -285,21 +298,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQ2OMCN8GNGYxJ
 # uVppSv8vsTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUFdOl5dstdX0S+3+zr20HEbotoYMwDQYJ
-# KoZIhvcNAQEBBQAEgYBx7h4h+5nDRx5YGb1QpVUrtnmLhom00HJuAvM+C4aLvKgZ
-# QhtaCAzoxaJyjBu7VnLiEWiqZ6TW5mpSPQ9tYiDvg4uuKdYBI/NHs7VleR7dhY0U
-# 4nEBmrgCxBjcaXMdm/TTvlQtfh874aEhxRPeqPKVSUlQ63vqnszSvBl2QZwWoKGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUnm+LL376jM+KXNDQBS/iocbkJYIwDQYJ
+# KoZIhvcNAQEBBQAEgYBK4LbgVLZNsP6G1WvvBmaLFHM+rfTD253rret1P/W4lo6d
+# /qOIi3GFsQkqnFvJwnG2bWCuuMsIXYJ0hiHADC6slvPFWlxOz0teYKuzcXd3jN7+
+# lcWyIL393zaruOWFl3uBPZSW6EP/vnxOgAYYL+WMfLHLJL4Y6EKNx8RPrL/BmKGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDM1MDVaMCMGCSqGSIb3DQEJBDEWBBSl
-# g3ri5Q53Nebku1ocaTCujW3AgDANBgkqhkiG9w0BAQEFAASCAQA2gk8qYbXf+phH
-# B7K+UGvxtp9od9+5I2JH1+WHLYz5eKFUPLADZyam9oKEkxHJzfK3gQ77R7pVipfH
-# BtNfASV5RwKNq8CUWyPBd8IYrQL+zqbN0TZ54hIgADxUVoZ1mxD27MJynuAAwoQ+
-# zHWRMb6zPKPpOlx3TfRNT2Wrxvs7SkzO+ukelhM1VWY9G/ZKHNsZqqtQkp6N5Vgr
-# Hppaecg0HMHqD+RGRtFN4VpRlM0eJC7YDDYBjJe4gzRn3uYFBZV7yoYtrrz+jYBw
-# 385g2AEWbyCiCUTV4suuCZdLN4h29jbUJwY0LqHqqDYi4LQfDnCjHgsCyS6mLQyj
-# ykHAAcKl
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDQ2MzFaMCMGCSqGSIb3DQEJBDEWBBTZ
+# zX9CeM6S7sr8p+b9xEjYnVVxeTANBgkqhkiG9w0BAQEFAASCAQBk3IiYQgt4p9Rj
+# rddJ6yFbs8CSOEajXYXRCMyXdt5zJmOeuj/E8QKn81RQpCJ/xiON14JAHqsux6Ku
+# ezn9dyqZR9LxBOMTENHyFSG8cr4GERBXnMPjMQ4q6InmuluKMhhToPES36L2HQmZ
+# czByDS8mucOFPcvXvbNE8y9PqXUn769XWMgu+LSTxWAuMwQ7ilPUCGTX1KbnWMr9
+# zj6UDE8hVVBRjqMMt5+faax/yl00hdLFEhGlu0XCKK2ENrg6u+A5FjzRSKw3fKoM
+# Lw13zDuT/cqh/jDtKsn+nbLFadzoixjTkes1z4JCkVV+PwTuRZgME2k9GSaw2XwL
+# IjjLnVRH
 # SIG # End signature block
