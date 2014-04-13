@@ -5,14 +5,14 @@
 $Host.UI.RawUI.WindowTitle = $text
 
 }
-
+$sScriptVersion = "Beta 1"
 Set-Alias title Set-WindowTitle
-title LoLTweaker
+title "LoLTweaker $sScriptVersion"
 $dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 $ErrorActionPreference = "SilentlyContinue"
-$sScriptVersion = "Beta 1"
+
 $sLogPath = "$dir"
-$sLogName = "LoLTweaker.log"
+$sLogName = "errorlog.log"
 $sLogFile = $sLogPath + "\" + $sLogName
 
 pop-location
@@ -31,15 +31,15 @@ cd $dir
 
 New-Item -ItemType directory -Path $dir\Backup
 Write-Host "Backing up..."
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
+Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
+Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
+Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
+Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
+Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
+Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
+Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
+Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
+Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
 
 Function Log-Start{
 
@@ -51,22 +51,14 @@ If((Test-Path -Path $sFullPath)){
 Remove-Item -Path $sFullPath -Force
 }
 New-Item -Path $LogPath -Name $LogName –ItemType File
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value "Started processing at [$([DateTime]::Now)]."
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value ""
-Add-Content -Path $sFullPath -Value "Running script version [$ScriptVersion]."
-Add-Content -Path $sFullPath -Value ""
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value ""
-Write-Debug "***************************************************************************************************"
-Write-Debug "Started processing at [$([DateTime]::Now)]."
-Write-Debug "***************************************************************************************************"
-Write-Debug ""
-Write-Debug "Running script version [$ScriptVersion]."
-Write-Debug ""
-Write-Debug "***************************************************************************************************"
-Write-Debug ""
+Add-Content  $sFullPath "***************************************************************************************************"
+Add-Content  $sFullPath "Started processing at [$([DateTime]::Now)]."
+Add-Content  $sFullPath "***************************************************************************************************"
+Add-Content  $sFullPath ""
+Add-Content  $sFullPath "Running script version [$ScriptVersion]."
+Add-Content  $sFullPath ""
+Add-Content  $sFullPath "***************************************************************************************************"
+Add-Content  $sFullPath ""
 }
 }
 
@@ -76,8 +68,6 @@ Function Log-Error{
 Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$ErrorDesc, [Parameter(Mandatory=$true)][boolean]$ExitGracefully)
 Process{
 Add-Content -Path $LogPath -Value "Error: An error has occurred [$ErrorDesc]."
-
-Write-Debug "Error: An error has occurred [$ErrorDesc]."
 
 If ($ExitGracefully -eq $True){
 Log-Finish -LogPath $LogPath
@@ -91,15 +81,12 @@ Function Log-Finish{
 [CmdletBinding()]
 Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$false)][string]$NoExit)
 Process{
-Add-Content -Path $LogPath -Value ""
-Add-Content -Path $LogPath -Value "***************************************************************************************************"
-Add-Content -Path $LogPath -Value "Finished processing at [$([DateTime]::Now)]."
-Add-Content -Path $LogPath -Value "***************************************************************************************************"
+Add-Content $LogPath ""
+Add-Content $LogPath "***************************************************************************************************"
+Add-Content $LogPath "Finished processing at [$([DateTime]::Now)]."
+Add-Content $LogPath "***************************************************************************************************"
 
-Write-Debug ""
-Write-Debug "***************************************************************************************************"
-Write-Debug "Finished processing at [$([DateTime]::Now)]."
-Write-Debug "***************************************************************************************************"
+
 If(!($NoExit) -or ($NoExit -eq $False)){
 Exit
 }
@@ -108,18 +95,18 @@ Exit
 
 Function restore {
 Write-Host "Restoring..."
-Copy-Item "backup\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\Adobe Air.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
-Copy-Item "backup\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
-Copy-Item "backup\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\Adobe Air.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "backup\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "backup\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
 Read-host -prompt "LoLTweaks finished!"
 exit
 }
@@ -141,31 +128,31 @@ cls
 Write-Host "Copying files..."
 start-process .\data\dxwebsetup.exe /q
 start-process .\Cg-3.1_April2012_Setup.exe /silent -wait
-Copy-Item "data\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources" 
-Copy-Item "data\Adobe AIR.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0" 
+Copy-Item "data\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources" 
+Copy-Item "data\Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0" 
 
 
 if($env:PROCESSOR_ARCHITECTURE -eq "AMD64")
     {
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
     }
     else
     {
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"  
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"  
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
 
     }
     cls
@@ -183,7 +170,7 @@ if ((Test-Path -path $key\uninst.exe))
 }
 
 Write-Host "Starting LoL-Launcher..."
-start-process "$dir\lol.launcher.exe"
+start-process lol.launcher.exe
 cls
 Write-Host ""
 Write-Host "#              #       #######"                                   
@@ -226,8 +213,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU+zUVwUpBHTuDgLwI7xWfb9Ju
-# 1qegggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUgBs0JMEdRGbPVzdQMgN0qHFQ
+# a9OgggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNTE4MjVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsCyZqFcRzjkh
@@ -267,21 +254,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQXAthJ5hykaRJ
 # eUI8kMiLQDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUA6iL2/p1XRFWx4RCyLdvMvdHjogwDQYJ
-# KoZIhvcNAQEBBQAEgYB/HSwq76onf29eulcDmd4OvbnkbYTjNcFqUe9VUVdhLE6Y
-# GmJe8iN6QJuD7WDEIq0wSJ6/CmZ9uhW/f+7AD1PLOXGy0jYaU4nDHVXICwOXaH36
-# dHXzEsZEzH/IOY0dAmdXQQo+/hZYatz1oJZC8sWeHfGEq/mJWTkWSUfJOsaVu6GC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUzSBCStKTVTmGmRa3rw0Kir8HBhwwDQYJ
+# KoZIhvcNAQEBBQAEgYCM2uBbpUKq0uXzLMqNOFtIAnPvaHumqwXWsElOKXjcGSmo
+# us5NGC8gTlDUPhRv0VqbgUEBy/bT8cD18A11QZbVYR/eih3Q3cOFfw2itVahSpus
+# DdOP8W/Ys/N84c7hPITETRxZMSrD+830DLg8HL2ve14xMnQCmcGY8W7fusHWnaGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwODEzNTBaMCMGCSqGSIb3DQEJBDEWBBSv
-# 7XRQfz0nUjH6lRq500wSnM3L+zANBgkqhkiG9w0BAQEFAASCAQAVEral50WIp4T7
-# rDWetbGZXWGKugQxS5sFMuZFhX1cLvBqXeNsoPPK0MTPEALjrspAtDQ5C0s5pb6B
-# hc/pfobQgwfRQuRtlychsDHIqi8O9yitYA0UzWc/ZLbAgTUbNeGiSu2z5x2HgyLQ
-# J/xRNIpvyR8e5CoZv5lP8LQBaYUpB1cIGbe7BXN5LMQ/9sD8ur6pIq1Vn2U6bpVA
-# 9JC52Rbp8793VVTg70blA411/Epq+3h+VDGOjPSQrvlOgG+DzumNIDhu000q3Tlt
-# My1MCGiHjQaOAT7SarpJeQreW16Mp6zTMxytHYVYeknrkMzcc0TXFQndPBOGO3W0
-# bO+MGJEd
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwOTIyNTZaMCMGCSqGSIb3DQEJBDEWBBRI
+# t6CD0hmy6gv+bLBc0Nsc79czyzANBgkqhkiG9w0BAQEFAASCAQASkDOPqwZ3xXGu
+# WSM7GlhsbgNIIx6YGzi+LarDyCE2BhRaAhHpPQ/xQktPRIkL08N9NUlICENEAieP
+# ZiBh9i6F2YUMFxSzWXc83I1wc+Qt43e8O/mOSEVtg10+rBqrbLIP+bOU9h014qLQ
+# Pqg+j5AAFwrLQjWSnUtvUI8yDqC8a77LPPa8tW6u3qGrvG2qBVolDlHa7abTry5O
+# SbL/J/xqsIrgH9SzEsvNxBmNVNyhAQCjzdjOL5ZwxKopdQ4PAKcZv/5ro322VLK8
+# YoidrTAOUnE5vaB66z7AbuverP4noJEeZbmA73ADI8eoiMSADNXblaLJcjbEvMMc
+# UUe8B8QY
 # SIG # End signature block
