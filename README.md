@@ -6,14 +6,13 @@ Extract all the files into the LoL folder (works for Garena)
 
 run powershell.exe as admin
 
-type "Set-Executionpolicy Unrestricted" (dont worry the policy will reset after a restart, otherwise you can typ "Set-Executionpolicy Restricted" when you are done)
+type "Set-Executionpolicy Unrestricted" (dont worry the policy will reset after a restart, otherwise you can type "Set-Executionpolicy Restricted" when you are done)
 
 Right click loltweaker.ps1 and run with powershell
 
 If that doesnt work then type ".\loltweaker.ps1"
 
 https://www.youtube.com/user/LogganSWE
-
 
 
 For Error 0xc000007b:
