@@ -1,6 +1,11 @@
 ﻿$title = "LoLTweaker"
-Write-Host "Backing up..."
+
 New-Item -ItemType directory -Path $dir\Backup
+Write-Host "Closing League of Legends..."
+stop-process -processname LoLLauncher 
+stop-process -processname LoLClient 
+stop-process -processname "League of Legends" 
+Write-Host "Backing up..."
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
@@ -10,7 +15,6 @@ Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Vers
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
-Write-Host "Backed up..."
 
 Function Log-Start{
 
@@ -103,20 +107,18 @@ Copy-Item "backup\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\depl
 Copy-Item "backup\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Copy-Item "backup\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Read-host -prompt "LoLTweaks finished!"
+exit
 }
 
 Function patch{
 Param()
 Begin{
-Log-Write -LogPath $sLogFile -LineValue "<description of what is going on>..."
+Log-Write -LogPath $sLogFile -LineValue "Log file for LoLTweaker"
 }
 Process{
 Try{
 Log-Start -LogPath $sLogPath -LogName $sLogName -ScriptVersion $sScriptVersion
-Write-Host "Closing League of Legends..."
-stop-process -processname LoLLauncher 
-stop-process -processname LoLClient 
-stop-process -processname "League of Legends" 
+
 
 
 pop-location
@@ -157,9 +159,6 @@ Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RA
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
 Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
-if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe" /silent
-} 
     }
     else
     {
@@ -169,22 +168,25 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solu
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"  
 Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy" 
+
+    }
+    cls
+Write-Host "Cleaning up..."
+if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"))
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe" /silent
+} 
 if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"))
 { start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe" /silent
 } 
-    }
-    cls
-Write-Host "Uninstalling PMB..."
-
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory" 
 
 if ((Test-Path -path $key\uninst.exe))
 { start-process "$key\uninst.exe"
 }
 
+Write-Host "Starting LoL-Launcher..."
 start-process "$dir\lol.launcher.exe"
 cls
-
 Write-Host ""
 Write-Host "#              #       #######"                                   
 Write-Host "#        ####  #          #    #    # ######   ##   #    #  #### "
@@ -258,8 +260,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUXpK2Pht3fGGJ1pni194RpU29
-# KuigggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU5fKioTYiYF1iHFnrt1TW8S1D
+# A6SgggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNTE4MjVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsCyZqFcRzjkh
@@ -299,21 +301,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQXAthJ5hykaRJ
 # eUI8kMiLQDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUopYSQsK38sBrd2gb6P2wQ3HtimYwDQYJ
-# KoZIhvcNAQEBBQAEgYBWeLPZD5L4syYddLd0ilJjY3CBzwOa0EY86uJ8GDt+BDex
-# H8yHUYDnwc7mh5811U68UKBshvwGtORikS4DdeK4/R3JY62sTSaql64qI2mx193T
-# TA/g87JSgtsjfHnRTP63/v5jyZSlb4SP4g+Df/F0SGd4En7S/Asx6k2va/WGBqGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUGgRPJRx1CGZvfKWWNIO7zUx1kmUwDQYJ
+# KoZIhvcNAQEBBQAEgYB+CNptNZqzNwx2qZw2AirfCRruW6BKzxiEGO9FKnbvBVnX
+# Zj3QElRKu1Gj1ICurJqzXhKLvZ9E3EqFAAUulqXh5VeptQwSRvB6ORoQEsa5/59G
+# eykyVXGBC9NdLzXulCo8tKARX1rZoQYrqm8yqUaPeEQSgXk0PPEOoX2aHszHw6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNjI3MjdaMCMGCSqGSIb3DQEJBDEWBBQX
-# GLZ8HDvWJ3N/JBB3XDsumXKScTANBgkqhkiG9w0BAQEFAASCAQBdBWtEqlGfA+Jx
-# IfeO2za/ddTqD2dCLJPc5k6xpAS1Qht1eG5sAplo2YELQeuqr+vseNDOhja/07dc
-# WIsXQ9do3t2NwavNcvqxvIvVmI5YMBmpbNE9Sju4BCohpzlSRcS4UIzvnbM1LQDA
-# oi0Ya7DaVLpQoNjlBN+311Jn9I5jDxfZwDKwWHBaiRyEU+KgUumzu7qzOJtdWrg3
-# pXaZjDfOjHn0d8F8O+NGRxluJ+IEu6W9C2+aT7Jrgw92iiW4PWUhGytTBBJLr6GX
-# 768ApcnsoH3Cf9hbAL1rGXazJFCXphKFW/q+YsglBY12706bJKu30MXAjA8jnlYu
-# LU7D7S0w
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNjMyNThaMCMGCSqGSIb3DQEJBDEWBBTR
+# lGROrUnwMq/xi9LY8w5/4L349DANBgkqhkiG9w0BAQEFAASCAQA8LADvpFlPCsEu
+# 3F5qq+K5aTFRb+dk59ajUBJpbcSAJ3G9S9OiuDYsBfiVh2hG4tNiiVmxDs/2Hi3s
+# sP1gXBx6uVm0+e9pVhJsQKXQMenKHXJiFlHvJsLsnXM0Tt2Kzya2L32x8IUSu7YY
+# VsCh6azKYf+seZXDGJYGSX8cnPcFg15G/G+D9K/etow0Xo8pgvHm1+3crZYlgkPv
+# yxKicDUrE9lkM+bLGQMgK37jOcbSaWeV6lTnASQyBGBFQ7INM4AScKIsoOoLyKiJ
+# ILlZ1LKJeuShskjMP9mnsjuBgt8p+EtuYudJnmiSxwdjIaUEcLvWuZtsx1LSC/d3
+# krup2j3K
 # SIG # End signature block
