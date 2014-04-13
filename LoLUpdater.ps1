@@ -16,30 +16,30 @@ $sLogName = "errorlog.log"
 $sLogFile = $sLogPath + "\" + $sLogName
 
 pop-location
-push-location "RADS\solutions\lol_game_client_sln\releases"
+push-location "$dir\RADS\solutions\lol_game_client_sln\releases"
 $sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 pop-location
-push-location "RADS\projects\lol_launcher\releases"
+push-location "$dir\RADS\projects\lol_launcher\releases"
 $launch = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 pop-location
-push-location "$RADS\projects\lol_air_client\releases"
+push-location "$dir\$RADS\projects\lol_air_client\releases"
 $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 cd $dir
 
 New-Item -ItemType directory -Path $dir\Backup
 Write-Host "Backing up..."
-Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
-Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
-Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
-Copy-Item "RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
-Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
-Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
-Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
-Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
-Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
 
 Function Log-Start{
 
@@ -95,18 +95,18 @@ Exit
 
 Function restore {
 Write-Host "Restoring..."
-Copy-Item "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\Adobe Air.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
-Copy-Item "backup\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
-Copy-Item "backup\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\Adobe Air.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "backup\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "backup\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "backup\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 Read-host -prompt "LoLTweaks finished!"
 exit
 }
@@ -128,40 +128,40 @@ cls
 Write-Host "Copying files..."
 start-process .\data\dxwebsetup.exe /q -Windowstyle Hidden
 start-process .\Cg-3.1_April2012_Setup.exe /silent -Windowstyle Hidden -wait
-Copy-Item "data\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
-Copy-Item "data\Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "data\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\dbghelp.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\tbb.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "data\NPSWF32.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "data\Adobe AIR.dll" "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
 
 
 if($env:PROCESSOR_ARCHITECTURE -eq "AMD64")
     {
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
     }
     else
     {
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\projects\lol_launcher\releases\$launch\deploy"
 
     }
     cls
 Write-Host "Cleaning up..."
-if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins001.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins001.exe"
+if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"))
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"
 }
-if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins001.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins001.exe"
+if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"))
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"
 }
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
@@ -212,8 +212,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUmHWrtWo77r2XZFJZLSba8i/J
-# U6OgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUvZPJeGzsRPPQUxt7VqfwG/Pa
+# 2L6gggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwOTQ3NTBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA2PtBBa2VTkfb
@@ -253,21 +253,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQpHN39fwu/o1I
 # hgtAQS8FnzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU5PY3onSmlbqEsItRm13d843TaoAwDQYJ
-# KoZIhvcNAQEBBQAEgYAxs7xroSbBaLXyFtUCQn0wR8ZkaWIhaa8nwt90p1RWBhzR
-# TG6BphGWLYdtcPlL519da36zS2KdyTG97g0DBj3M585IXW1WgGi3dt8/5UMKPn2E
-# EFtnmSURoL4dQ86X64dJ629KBY+IdUBo7ueVW7QUDSWhx7KbnrpOn8RHhz0emaGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUtoBsa1/IHGArskN1F4n9OyiOfXowDQYJ
+# KoZIhvcNAQEBBQAEgYC5SHl+AQ1ywGkAghoTDAx7qiEbFcKN86VXa5/JXRi7TjhA
+# LMjpHYIwHjo1PGndDyk3w/UhVDAOBXmGKOsdb1qhCZh3XCXSWBdebtEsMMHw+2lI
+# beLyClafanFwQzyS1w6e+i+HOtiCOQ7+9puHrDyA9uWaagbGqX5pmEcydOSilaGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwOTUzMzVaMCMGCSqGSIb3DQEJBDEWBBQn
-# 3G0nkL3GMYNZyYRzGeJxt11/NTANBgkqhkiG9w0BAQEFAASCAQCtmgIvHpsb6mp8
-# KTlh5rENPFqLNKjnlvJyhdiQAqNjcP7YrB074SAh0F/mhQoTEobozG2xWXSJ6b2T
-# gJ6zzAgjULVao4llkfR1yDh8L1bXKpGHnf2ev8ZKBeSTH5KCgR7NEoyW4jbtEGSs
-# InSk6XcCjGPyyLEDhglJy8v9MVX3W8WMtftb/qDvJ1xvPyntpmJlNtjwclhWu81u
-# +pMClEGC3fMEmmZm49unlC2a97NP4h1WpaT0KCPTj7Zon2lsS1/MNsQntA9zA46l
-# dA5BEcCPaVzGjO3KntoiOZJF8FuNH/pLlhu1a5IfVw+U1g9WO5o2kqnOPJHenH90
-# rnnf/brU
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDA0MDFaMCMGCSqGSIb3DQEJBDEWBBSW
+# E7CdE+Y9l5ltOY/nRVZY++IgxDANBgkqhkiG9w0BAQEFAASCAQAySBTSw/nmykAZ
+# YxbrivBnbFaKnCSjeG8nrBjlxbS1CrtjXMedyqGv4qPs8zhmk4xQclIuLjpzFFxI
+# 3K5u7wfcqh7mwaZRmXKt0zRHdPWS+q2ZlfBQN6bDeD3e/ZRdHqpSRxAxr1s1sqlT
+# dWuUFA0XeeqvAlPF0ewORmyc3YXIVIZ0mBeNe82pHa6tVqLf1dOs1P1wdmi2EY8f
+# opNLSlpmYPnJxJhpIG1JGvEq4d2556nIWjJpicKCVsqVKA4GHzHickiKQU9nE9PK
+# xDMoQhhiwkS8ZBnDJ+wZTYnKIlez2AZMPX4MnBxobQHfkl0XVSzZIvdY23Bzgv6g
+# bcuwLdCd
 # SIG # End signature block
