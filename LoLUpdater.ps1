@@ -1,4 +1,33 @@
-﻿Function Log-Write{
+﻿Function Log-Start{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LogName, [Parameter(Mandatory=$true)][string]$ScriptVersion)
+Process{
+$sFullPath = $LogPath + "\" + $LogName
+If((Test-Path -Path $sFullPath)){
+Remove-Item -Path $sFullPath -Force
+}
+New-Item -Path $LogPath -Name $LogName –ItemType File
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value "Started processing at [$([DateTime]::Now)]."
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value ""
+Add-Content -Path $sFullPath -Value "Running script version [$ScriptVersion]."
+Add-Content -Path $sFullPath -Value ""
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value ""
+Write-Debug "***************************************************************************************************"
+Write-Debug "Started processing at [$([DateTime]::Now)]."
+Write-Debug "***************************************************************************************************"
+Write-Debug ""
+Write-Debug "Running script version [$ScriptVersion]."
+Write-Debug ""
+Write-Debug "***************************************************************************************************"
+Write-Debug ""
+}
+}
+
+Function Log-Write{
 
 [CmdletBinding()]
 Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LineValue)
@@ -44,58 +73,22 @@ Exit
 }
 }
 }
- 
-Function Log-Email{
 
-[CmdletBinding()]
-Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$EmailFrom, [Parameter(Mandatory=$true)][string]$EmailTo, [Parameter(Mandatory=$true)][string]$EmailSubject)
-Process{
-Try{
-$sBody = (Get-Content $LogPath | out-string)
 
-$sSmtpServer = "smtp.gmail.com"
-$oSmtp = new-object Net.Mail.SmtpClient($sSmtpServer)
-$oSmtp.Send($EmailFrom, $EmailTo, $EmailSubject, $sBody)
-Exit 0
-}
-Catch{
-Exit 1
-}
-}
+Function backup {
+Write-Host "Backing up..."
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
+Read-host -prompt "LoLTweaks finished!"
 }
 
-$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
-New-Item -ItemType directory -Path $dir\Backup
-
-
-$title = "Delete Files"
-$message = "Do you want to patch or restore?"
-
-$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
-
-$no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
-    "Retains all the files in the folder."
-
-$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
-
-$result = $host.ui.PromptForChoice($title, $message, $options, 0) 
-
-switch ($result)
-    {
-        0 {patch}
-        1 {restore}
-    }
-
-
-$ErrorActionPreference = "SilentlyContinue"
-
-$sScriptVersion = "1.0"
-$sLogPath = "$dir"
-$sLogName = "LoLUpdater.log"
-$sLogFile = $sLogPath + "\" + $sLogName
-
- 
- 
 Function patch{
 Param()
 Begin{
@@ -173,9 +166,6 @@ if ((Test-Path -path $key\uninst.exe))
 { start-process "$key\uninst.exe"
 }
 
-
-
-
 start-process "$dir\lol.launcher.exe"
 cls
 
@@ -205,66 +195,71 @@ Log-Write -LogPath $sLogFile -LineValue "Script finished"
 }
 }
 
-Function backup {
-Write-Host "Backing up..."
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
-Read-host -prompt "LoLTweaks finished!"
-}
-
-Function Log-Start{
+Function Log-Email{
 
 [CmdletBinding()]
-Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LogName, [Parameter(Mandatory=$true)][string]$ScriptVersion)
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$EmailFrom, [Parameter(Mandatory=$true)][string]$EmailTo, [Parameter(Mandatory=$true)][string]$EmailSubject)
 Process{
-$sFullPath = $LogPath + "\" + $LogName
-If((Test-Path -Path $sFullPath)){
-Remove-Item -Path $sFullPath -Force
+Try{
+$sBody = (Get-Content $LogPath | out-string)
+
+$sSmtpServer = "smtp.gmail.com"
+$oSmtp = new-object Net.Mail.SmtpClient($sSmtpServer)
+$oSmtp.Send($EmailFrom, $EmailTo, $EmailSubject, $sBody)
+Exit 0
 }
-New-Item -Path $LogPath -Name $LogName –ItemType File
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value "Started processing at [$([DateTime]::Now)]."
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value ""
-Add-Content -Path $sFullPath -Value "Running script version [$ScriptVersion]."
-Add-Content -Path $sFullPath -Value ""
-Add-Content -Path $sFullPath -Value "***************************************************************************************************"
-Add-Content -Path $sFullPath -Value ""
-Write-Debug "***************************************************************************************************"
-Write-Debug "Started processing at [$([DateTime]::Now)]."
-Write-Debug "***************************************************************************************************"
-Write-Debug ""
-Write-Debug "Running script version [$ScriptVersion]."
-Write-Debug ""
-Write-Debug "***************************************************************************************************"
-Write-Debug ""
+Catch{
+Exit 1
 }
 }
+}
+
+$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
+$ErrorActionPreference = "SilentlyContinue"
+$sScriptVersion = "1.0"
+$sLogPath = "$dir"
+$sLogName = "LoLUpdater.log"
+$sLogFile = $sLogPath + "\" + $sLogName
+New-Item -ItemType directory -Path $dir\Backup
+
+
+$title = "Delete Files"
+$message = "Do you want to patch or restore?"
+
+$yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
+
+$no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
+    "Retains all the files in the folder."
+
+$options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+
+$result = $host.ui.PromptForChoice($title, $message, $options, 0) 
+
+switch ($result)
+    {
+        0 {patch}
+        1 {restore}
+    }
+
+
 
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU5lZpstm9NCQ2OG+w/QoS28jX
-# hVOgggbUMIICOTCCAaagAwIBAgIQMYIJT0o9XalEyIVisxxD2DAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUPb1C/oq6JA9WDwYRzv+zNQ3G
+# bgegggbUMIICOTCCAaagAwIBAgIQ2OMCN8GNGYxJuVppSv8vsTAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTMwNDA2NDBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA4YMGn2O5fHPl
-# PBjHi0K/DcWuuKPr6t/rBY8Af+hwGoXCb2A32pxOcsMxXFCPWoREedrD4CkUZgMa
-# vOObQ8AI7f2EOKB3xAZmZOEZGG8wU/XXSLWsuaojnItsTGC4WJyM+AilTeINvr01
-# APeUErBoEBNf+8bJEOJILPvKrufvqR0CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTMwNDI0NDlaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAwY2kr8t0tefl
+# /kq+gGpe2M9BtGpDesJTLZN0wL8xmQDiJCL+19FZd6kGG/tVryQE0amo4zn+XyXG
+# hZWtb1dtU1Q/iEbcv1lLknnZQ9NjKZBkKKCm4gJp3aKV2FANQ7juiYrYRxgvTfRi
+# Goi5ClRoTK+37hP0dqw4UslDZgOsEvECAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ5nF8jrl4ebXAMucz3ni5waEuMCwxKjAoBgNVBAMT
-# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQfNrH4w9PUKNCTcac
-# rayd+jAJBgUrDgMCHQUAA4GBAGKNIVDaik6IXZMOLy60jr3shNhAEpqZRh+O0UqL
-# swsB5i0HCMcfWCBMwTe7TUW2N2JixBPGF5c9rAz+wQiUSkxpKr3EWkNTVXFAwtYb
-# t/e4GuJ07+emmxsbxjpPD1giZQjoc0UAqbdodX82I8m0eTCvy36IkdCU1JyvP/d6
-# 0T5WMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQJJyE96f4G4dMUSj5
+# +YrhtDAJBgUrDgMCHQUAA4GBAFg+Ct9hb5BI0Wom9lASJ17jG0UBJ8H3IQiEhSYF
+# QtnUUCw45Kqh2MY9X6xRavlo53DJw3PsH+fy5vkDlmCUwtomHenCAsWGRgLZ2Pwt
+# vDLPmD88BORl4B/ES+lY/D4l30Lb8hGQi/aTdC+dHmGRjspVqurThoqxsF+/CMLy
+# +hKcMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -289,24 +284,24 @@ Write-Debug ""
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQMYIJT0o9XalE
-# yIVisxxD2DAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQ2OMCN8GNGYxJ
+# uVppSv8vsTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUvAuvtS8QjcYoEy8wbOVRw5YeZQcwDQYJ
-# KoZIhvcNAQEBBQAEgYAJK7od909GPP6VVCYlENtCjo/HUl7Xt2biLlBV5ExTlP/Q
-# jJ+My+Jdfe0R95PlR4xJS+I9coSgmVVBPlMNZRL9sKjRMs6iFErxA6EGUq5kS36g
-# 48rdCK3grXa7ZsvPgvNS2ZvKlmD/U8KtncmdwF31I3C9jVsXKbTIBmvTlG7xRKGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU4E8OqPpAE528RuMYckUgJyclEdowDQYJ
+# KoZIhvcNAQEBBQAEgYApIxzKpNEEoDm+NYQMNfKx8tOAXqtDSm4sSqHxK0pa10nc
+# DY37IYJ2VEnJfKyqlYzeK21nOvMAvyFFAur5ws9RKJhMxKRMxP8Pl5VAxjfwwNRB
+# 9cgrqAYDCSZdT7IaL/tfRxYSBLkiMo+sljDZf0bz159KwMNoGid1iLjtFS0db6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDA3MTNaMCMGCSqGSIb3DQEJBDEWBBSt
-# 8+/m1C+rvx7gC9BRt/qZ2h3xtjANBgkqhkiG9w0BAQEFAASCAQB6nLjdEeya6y+5
-# 8z58oUap26brbAXSOAfb8VczyLff62UslDlK5deiFPCrmBh68tpdRWbPzmVFngmo
-# fORmwLGX7XIwX5cx5SI4swq5fGb8ZX9KmPznmGDINuweqMCqM5xs/3X350jZ85sn
-# Uw6CJyDZgrrIN3sr2iJ3FVcTcXuKaX3lh6AGVtLva9fgbSv2YnZyG/yH4kdjBBeH
-# ClJ/icWQk0dL27aR7EdP1iTuKnPQVUEvFwMJhzY1a5TWPA6CkHHL3EIqCS2Dv57N
-# LNtmlu5FZvQBLllLcne7u30V+Nozfl4NawGG0Rwm5YbJ3lLEdOBOAoDOSwPmCUPY
-# GC03JEdB
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNDI2MjVaMCMGCSqGSIb3DQEJBDEWBBRg
+# U48uIoP3SKo5wepR5qEMSAwzqTANBgkqhkiG9w0BAQEFAASCAQAXXJrqg6NdBM5Y
+# 1fHqI2LlKxusJG+qlucby4OZtQpX8pnS8tKbekQs+zmdwlzjIXw1mnINhDBSgnON
+# ycpTi6ZckKS0jXEGhZCNF3EBCZANJf5Z6G1alm5nCKSH6MftdP/wNBWmEfWdC4o1
+# 2kVnvdUT5x/LXtcQBIYbDutTY15KCNAnruDTyiEPI6HaNQH/eU5J5YynhkBr00rZ
+# VwrgF5KN+9Y7G9sQfNFVkvRliY6MdmD7rsDtTb+q1u9gczwMAVNqjqsDYDoYA5He
+# aHJScyX3Wumaf0QAIiKYulnA1MZ/taUunAHqdhtn9mUp/y1R2Uv6+c5pfzcIB/iq
+# XAecBY62
 # SIG # End signature block
