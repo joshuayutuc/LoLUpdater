@@ -1,6 +1,80 @@
-﻿. .\data\Logging.ps1
+﻿Function Log-Write{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LineValue)
+Process{
+Add-Content -Path $LogPath -Value $LineValue
+
+Write-Debug $LineValue
+}
+}
+ 
+Function Log-Error{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$ErrorDesc, [Parameter(Mandatory=$true)][boolean]$ExitGracefully)
+Process{
+Add-Content -Path $LogPath -Value "Error: An error has occurred [$ErrorDesc]."
+
+Write-Debug "Error: An error has occurred [$ErrorDesc]."
+
+If ($ExitGracefully -eq $True){
+Log-Finish -LogPath $LogPath
+Break
+}
+}
+}
+ 
+Function Log-Finish{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$false)][string]$NoExit)
+Process{
+Add-Content -Path $LogPath -Value ""
+Add-Content -Path $LogPath -Value "***************************************************************************************************"
+Add-Content -Path $LogPath -Value "Finished processing at [$([DateTime]::Now)]."
+Add-Content -Path $LogPath -Value "***************************************************************************************************"
+
+Write-Debug ""
+Write-Debug "***************************************************************************************************"
+Write-Debug "Finished processing at [$([DateTime]::Now)]."
+Write-Debug "***************************************************************************************************"
+If(!($NoExit) -or ($NoExit -eq $False)){
+Exit
+}
+}
+}
+ 
+Function Log-Email{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$EmailFrom, [Parameter(Mandatory=$true)][string]$EmailTo, [Parameter(Mandatory=$true)][string]$EmailSubject)
+Process{
+Try{
+$sBody = (Get-Content $LogPath | out-string)
+
+$sSmtpServer = "smtp.gmail.com"
+$oSmtp = new-object Net.Mail.SmtpClient($sSmtpServer)
+$oSmtp.Send($EmailFrom, $EmailTo, $EmailSubject, $sBody)
+Exit 0
+}
+Catch{
+Exit 1
+}
+}
+}
+
 $dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 New-Item -ItemType directory -Path $dir\Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" Backup
+Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" Backup
+Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" Backup
 $ErrorActionPreference = "SilentlyContinue"
 
 $sScriptVersion = "1.0"
@@ -88,15 +162,7 @@ if ((Test-Path -path $key\uninst.exe))
 { start-process "$key\uninst.exe "
 }
 
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" Backup
-Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" Backup
-Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" Backup
+
 
 
 start-process "$dir\lol.launcher.exe"
@@ -127,24 +193,57 @@ Log-Write -LogPath $sLogFile -LineValue "Script finished"
 }
 }
 
+
+
+Function Log-Start{
+
+[CmdletBinding()]
+Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LogName, [Parameter(Mandatory=$true)][string]$ScriptVersion)
+Process{
+$sFullPath = $LogPath + "\" + $LogName
+If((Test-Path -Path $sFullPath)){
+Remove-Item -Path $sFullPath -Force
+}
+New-Item -Path $LogPath -Name $LogName –ItemType File
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value "Started processing at [$([DateTime]::Now)]."
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value ""
+Add-Content -Path $sFullPath -Value "Running script version [$ScriptVersion]."
+Add-Content -Path $sFullPath -Value ""
+Add-Content -Path $sFullPath -Value "***************************************************************************************************"
+Add-Content -Path $sFullPath -Value ""
+Write-Debug "***************************************************************************************************"
+Write-Debug "Started processing at [$([DateTime]::Now)]."
+Write-Debug "***************************************************************************************************"
+Write-Debug ""
+Write-Debug "Running script version [$ScriptVersion]."
+Write-Debug ""
+Write-Debug "***************************************************************************************************"
+Write-Debug ""
+}
+}
+ 
+
+
 patch
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUAmzka+aTTHylOEcJpLjy2lN5
-# /WmgggbUMIICOTCCAaagAwIBAgIQGqStUKicZL1I4FKrOsxRFTAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUwD10iJSCM0kkLDiNwdT6OpWj
+# QFSgggbUMIICOTCCAaagAwIBAgIQv1RyTowzq4RB1+dREMrv1jAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTMwMjMxMDdaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA1UPURMnlvJjm
-# FQLmBzt2BnUBbSPN5OI40UpO+6FaKkrvgzID6JDy1IZ4kW7sVNzkBkdSWFELnIJR
-# 7JkQtNfSEAEwEgnQRH6lkXfHvKEsGZxweO2pgwmuvbZGnNCHjM17S/TY3Qg4u2Hd
-# UWTGuOoX6W5B7YbDZDsAhYt22sjAOI0CAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTMwMjQ1MDVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAphAas5fefSJP
+# cvdszx/Din1IzAQ6O2bXksHie3OATxgv16/OFYo3uzT6Jg5tOwSgb1m5ftYMZF1P
+# ru0SCWjd17UmJUGN0+oFG5i95CM9ohu9qP7SB8BTj21ca6sxcpXow/nYJ3gIwWtY
+# E2M4xKj7LbMzR87EJtQY6ICUrSyZTqECAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ5nF8jrl4ebXAMucz3ni5waEuMCwxKjAoBgNVBAMT
-# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQq2qprVetx6NGMBaj
-# o11nuTAJBgUrDgMCHQUAA4GBADJIfdTzjShF0NfhHByaRK+RfFVRXcNX6i3Pt2TA
-# T6Bb1gLTgXBzbmfuA8n8rExzxoZgr6HXHgRayXITehWf7Cd9H1hDx1gIjKfX/arg
-# yhSqclBkDUewotgO/Khni7ARydPQwTKP5Rptg3nj2CnFd3guR2ExSK1anMUn5DLg
-# XvXbMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQQi98cagnAJNBOKt4
+# CHSVbzAJBgUrDgMCHQUAA4GBAHy/+zKPtNm0MjezUcaei2DEokLMH1vfZq/8gjl8
+# MGvf9dGLxbhfv9Z23vR/kOfwZhBNk3by+ACTsEaqSlFOX5ShzbBbkUQ6mHnt+UA5
+# TtGLq6Wu8RyVBlBMK/vSQuTD5jvrN/sduHKp0A8MqbRClZNR+/bSq3+lTqwv48+B
+# WcZjMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -169,24 +268,24 @@ patch
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQGqStUKicZL1I
-# 4FKrOsxRFTAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQv1RyTowzq4RB
+# 1+dREMrv1jAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUIwVjuu2Ce68S8eBPyJdYVNTJSQQwDQYJ
-# KoZIhvcNAQEBBQAEgYCyizeW0Nw+hXfuFvdTFcnzJ6/0oLS+llStFO57byAi6UsN
-# CNjrnGSlp9Kw8E2gj6OLeE2DDHZcsZhW6spBqs9JF63C/ZxGparDGgtwfiaHqQBZ
-# Pe71VAFEipALuE5SAHNNvloqkxcRPAsfp/EdY8ccasZxy0v6TjSWIzeM5WTR2aGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUOTLNutp+aTYDKkyeZaPZ10JCXEswDQYJ
+# KoZIhvcNAQEBBQAEgYA9x6s3dzHk9Zb/zSYv53TYWgZv5qbVV+6PkSwErCL7BcXf
+# NLkL4/Y1728vN5XUyzGBdob2UcnynpR5dAjMC+NvcIlj6drpCYKCOqfk/x3w8GW7
+# 1olKCb5eBb/QRfBfw3YF0VNSJO+EP8FQL/GTM2J4YOfviCu0Kld9MqIFgvqBOqGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwMjMxMjdaMCMGCSqGSIb3DQEJBDEWBBTz
-# nv+laSL0OPeK0XF9/qMkmQsWejANBgkqhkiG9w0BAQEFAASCAQBVChqU/TmzoJVN
-# o39QeZEMRFLM6a/nJhnmBZiPBLqgYmzAVL9KiIrydxNsc7lsa0YjuT1P1yzDkl5S
-# 4oCnigvbmOmHZkIiEltO2M3zURNKdoNlO3uFmKoNxLNTNCdak5vy6Xy6Xxzj6nye
-# JzSPyfWALT0M6KrqxLw5lt4tu7kRQOHABdXvjqtcgWhzaeYKtBXBq4RvxkC+JhP4
-# ngePEe/DJr7g1tKvZQnqUKkGOKKlUujr9laWQnrsaJ2N3h+I2UtcwDOUKnIOghM/
-# 7zjDMPtEco7hQ2JpHLZS+eEbLeSQMuO5JnfB0ZMLDrRZJRhGIQjTtwZKsVUo0YTH
-# g/SPI2sG
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwMjQ1MjBaMCMGCSqGSIb3DQEJBDEWBBSD
+# kVgj4/ty4JCP5kJWajnJJNyP7jANBgkqhkiG9w0BAQEFAASCAQCwGYK+vPT2peQ0
+# Fud82srjjMvjL3oPw5NHC6UGOvnEDxA0mRAgt7aO64zZOJx4vTSLlu2/8zCiLp0J
+# BU5qoIcnjrUX+Nh2JqG42m7GlR4AoWsYc16kTkXdV15IECuwqR02Zv7sGpJGbYyt
+# Lj0bbPhWWY7YQjjoWl2252rUMBBLTueD1DC7z2UbxHPuVxyJco8+IyS49JAmcDp0
+# iDiGELIn9Xv2ZG8ArDTSSYnTrnlcfviZN0FBpls8l4Vdc5k7XsnTMfOQLaW7wB5H
+# Ic5hJQOW/7lya5QLpnUyJnbSgawnZlLw1cHaVaNVVFZu1xzPWeKsZo43zGsQPg3S
+# ECnFbDcV
 # SIG # End signature block
