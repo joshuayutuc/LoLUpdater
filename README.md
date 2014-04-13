@@ -1,10 +1,7 @@
 LoLUpdater
 ==========
 
-Right click zip file -> properties -> unblock
-
-Just run the Installer
-
+Soon with a GUI
 
 LoLUpdater OSX
 ==============

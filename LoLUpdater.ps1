@@ -1,10 +1,25 @@
-﻿$title = "LoLTweaker"
+﻿$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
+$ErrorActionPreference = "SilentlyContinue"
+$sScriptVersion = "1.0"
+$sLogPath = "$dir"
+$sLogName = "LoLUpdater.log"
+$sLogFile = $sLogPath + "\" + $sLogName
+
+pop-location
+push-location "$dir\RADS\solutions\lol_game_client_sln\releases"
+$sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
+
+pop-location
+push-location "$dir\RADS\projects\lol_launcher\releases"
+$launch = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
+
+pop-location
+push-location "$dir\RADS\projects\lol_air_client\releases"
+$air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
+
+cd $dir
 
 New-Item -ItemType directory -Path $dir\Backup
-Write-Host "Closing League of Legends..."
-stop-process -processname LoLLauncher 
-stop-process -processname LoLClient 
-stop-process -processname "League of Legends" 
 Write-Host "Backing up..."
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
@@ -55,7 +70,8 @@ Add-Content -Path $LogPath -Value $LineValue
 Write-Debug $LineValue
 }
 }
- 
+
+$LineValue = "Success"
 Function Log-Error{
 
 [CmdletBinding()]
@@ -112,29 +128,13 @@ exit
 
 Function patch{
 Param()
-Begin{
-Log-Write -LogPath $sLogFile -LineValue "Log file for LoLTweaker"
-}
 Process{
 Try{
 Log-Start -LogPath $sLogPath -LogName $sLogName -ScriptVersion $sScriptVersion
-
-
-
-pop-location
-push-location "$dir\RADS\solutions\lol_game_client_sln\releases"
-$sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
-
-pop-location
-push-location "$dir\RADS\projects\lol_launcher\releases"
-$launch = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
-
-pop-location
-push-location "$dir\RADS\projects\lol_air_client\releases"
-$air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
-
-cd $dir
-
+Write-Host "Closing League of Legends..."
+stop-process -processname LoLLauncher 
+stop-process -processname LoLClient 
+stop-process -processname "League of Legends" 
 cls
 Write-Host "Downloading files..."
 import-module bitstransfer
@@ -197,17 +197,13 @@ Write-Host "#       #    # #          #    ##  ## #      #    # #   #  #    #"
 Write-Host "#######  ####  #######    #    #    # ###### #    # #    #  ####"
 Write-Host ""
 Read-host -prompt "LoLTweaks finished!"
+
 Log-Finish -LogPath $sLogFile
 }
 Catch{
 $sError = $Error[0] | Out-String
 Log-Error -LogPath $sLogFile -ErrorDesc $sError -ExitGracefully $True
 Break
-}
-}
-End{
-If($?){
-Log-Write -LogPath $sLogFile -LineValue "Script finished"
 }
 }
 }
@@ -231,22 +227,12 @@ Exit 1
 }
 }
 
-$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
-$ErrorActionPreference = "SilentlyContinue"
-$sScriptVersion = "1.0"
-$sLogPath = "$dir"
-$sLogName = "LoLUpdater.log"
-$sLogFile = $sLogPath + "\" + $sLogName
-
-
-
 cls
 $message = "Do you want to patch or restore LoL to it's original state?"
 
 $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&patch"
-    "Patches the LoL Game"
+
 $no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
-    "Restores LoL to its original state"
 
 $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 
@@ -260,8 +246,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU5fKioTYiYF1iHFnrt1TW8S1D
-# A6SgggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUU9DEroO11OJAMCnHvWINSyWK
+# 5kigggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNTE4MjVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsCyZqFcRzjkh
@@ -301,21 +287,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQXAthJ5hykaRJ
 # eUI8kMiLQDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUGgRPJRx1CGZvfKWWNIO7zUx1kmUwDQYJ
-# KoZIhvcNAQEBBQAEgYB+CNptNZqzNwx2qZw2AirfCRruW6BKzxiEGO9FKnbvBVnX
-# Zj3QElRKu1Gj1ICurJqzXhKLvZ9E3EqFAAUulqXh5VeptQwSRvB6ORoQEsa5/59G
-# eykyVXGBC9NdLzXulCo8tKARX1rZoQYrqm8yqUaPeEQSgXk0PPEOoX2aHszHw6GC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUIk8h127GwKbiRsQZEm2+i+JxGnowDQYJ
+# KoZIhvcNAQEBBQAEgYAp7pFjyF+K4nQODAjx7ea8xD6V4RDhen2whcGcXTm+heS/
+# Mgmesgph0ljdSIu3M7QqM9iX8MZK1f137Zd/Ti9HkRcgkrE0/DjbmoqTnsB9Zc+d
+# 9xB1W78f8vZRSv74S6zSzurHCsnJsqKp8SVVeAwfvVBXH2983YtxPnC+iTH9t6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNjMyNThaMCMGCSqGSIb3DQEJBDEWBBTR
-# lGROrUnwMq/xi9LY8w5/4L349DANBgkqhkiG9w0BAQEFAASCAQA8LADvpFlPCsEu
-# 3F5qq+K5aTFRb+dk59ajUBJpbcSAJ3G9S9OiuDYsBfiVh2hG4tNiiVmxDs/2Hi3s
-# sP1gXBx6uVm0+e9pVhJsQKXQMenKHXJiFlHvJsLsnXM0Tt2Kzya2L32x8IUSu7YY
-# VsCh6azKYf+seZXDGJYGSX8cnPcFg15G/G+D9K/etow0Xo8pgvHm1+3crZYlgkPv
-# yxKicDUrE9lkM+bLGQMgK37jOcbSaWeV6lTnASQyBGBFQ7INM4AScKIsoOoLyKiJ
-# ILlZ1LKJeuShskjMP9mnsjuBgt8p+EtuYudJnmiSxwdjIaUEcLvWuZtsx1LSC/d3
-# krup2j3K
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNjU4MTZaMCMGCSqGSIb3DQEJBDEWBBQL
+# O/Fg9MZIWXW/GlJojm3w2FLgeDANBgkqhkiG9w0BAQEFAASCAQBonSrzfzhVYo5S
+# X9wBqISfulTjRAEvU4lHpR53JgkbJCy/AU7yMGKh/i1r8FddR/A7gTZOaHQqzxZj
+# gzoXOg/3AE8i9kIjB6cP00ze4KCBjnzKCX6qeKwPr+kICWyfP4ZxQoL6K70bHkne
+# stqWAVj4B/1BnwLgTc/ymEvIRta6JzG1kRMrgXWgozoUGcp2+EQTv2fLBB2UElJB
+# nASOwc/PzqJ9WOlXgfyDTy5qcBgcbnDRs8boLXryXuJnngZ8kGJrmgO1RC1jFcbL
+# eFtH+meLPQzDjYLwy/CMg/Pjpb6mq0ZyMVl2BfvPu2UfLiC0OSo9iWrVTVjhlvWL
+# RGicARwm
 # SIG # End signature block
