@@ -14,4 +14,9 @@ C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell set-executionpolicy AllSig
 C:\Windows\System32\WindowsPowerShell\v1.0\powershell set-executionpolicy AllSigned >nul
 )
 cd..
-powershell.exe -File lolupdater.ps1
+
+if %PROCESSOR_ARCHITECTURE%==x86 (
+C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe -File lolupdater.ps1 set-executionpolicy AllSigned >nul
+) else (
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -File lolupdater.ps1 set-executionpolicy AllSigned >nul
+)
