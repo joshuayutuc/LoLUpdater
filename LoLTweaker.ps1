@@ -23,7 +23,6 @@ Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
-start-process dxwsetup.exe /q
 
 Function restore {
 Write-Host "Restoring..."
