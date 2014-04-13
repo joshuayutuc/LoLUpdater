@@ -5,6 +5,8 @@ Right click .zip -> properties -> Unblock -> OK
 
 Put in the LoL folder then Use Powershell.exe to hax it to make it work
 
+Once you get the shell up you can use the debugger to find errors and solve them yourself.
+
 Soon with a GUI
 
 https://www.youtube.com/user/LogganSWE
