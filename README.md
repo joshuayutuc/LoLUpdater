@@ -2,9 +2,13 @@ LoLUpdater
 ==========
 Right click .zip -> properties -> Unblock -> OK
 
-Put in the LoL folder then Use Powershell.exe to hax it to make it work
+Extract all the files into the LoL folder (works for Garena)
 
-Once you get the shell up you can use the debugger to find errors and solve them yourself.
+run powershell.exe as admin
+
+type "Set-Executionpolicy Unrestricted"
+
+Right click loltweaker.ps1 and run with powershell
 
 Soon with a GUI
 
