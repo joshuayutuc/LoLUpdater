@@ -85,18 +85,18 @@ Exit
 
 Function restore {
 Write-Host "Restoring..."
-Copy-Item "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "backup\Adobe Air.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
-Copy-Item "backup\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
-Copy-Item "backup\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
-Copy-Item "backup\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item .\backup\dbghelp.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\cg.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\cgD3D9.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\cggl.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\tbb.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\BsSndRpt.exe .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\BugSplat.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
+Copy-Item .\backup\Adobe Air.dll "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item .\backup\NPSWF32.dll "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item .\backup\cg.dll .\RADS\projects\lol_launcher\releases\$launch\deploy
+Copy-Item .\backup\cgD3D9.dll .\RADS\projects\lol_launcher\releases\$launch\deploy
+Copy-Item .\backup\cggl.dll .\RADS\projects\lol_launcher\releases\$launch\deploy
 Read-host -prompt "LoLTweaks finished!"
 exit
 }
