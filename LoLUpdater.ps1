@@ -16,15 +16,15 @@ $sLogName = "errorlog.log"
 $sLogFile = $sLogPath + "\" + $sLogName
 
 pop-location
-push-location "$dir\RADS\solutions\lol_game_client_sln\releases"
+push-location "RADS\solutions\lol_game_client_sln\releases"
 $sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 pop-location
-push-location "$dir\RADS\projects\lol_launcher\releases"
+push-location "RADS\projects\lol_launcher\releases"
 $launch = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 pop-location
-push-location "$dir\RADS\projects\lol_air_client\releases"
+push-location "$RADS\projects\lol_air_client\releases"
 $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 cd $dir
@@ -51,14 +51,14 @@ If((Test-Path -Path $sFullPath)){
 Remove-Item -Path $sFullPath -Force
 }
 New-Item -Path $LogPath -Name $LogName –ItemType File
-Add-Content  $sFullPath "***************************************************************************************************"
-Add-Content  $sFullPath "Started processing at [$([DateTime]::Now)]."
-Add-Content  $sFullPath "***************************************************************************************************"
-Add-Content  $sFullPath ""
-Add-Content  $sFullPath "Running script version [$ScriptVersion]."
-Add-Content  $sFullPath ""
-Add-Content  $sFullPath "***************************************************************************************************"
-Add-Content  $sFullPath ""
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath "Started processing at [$([DateTime]::Now)]."
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath ""
+Add-Content $sFullPath "Running script version [$ScriptVersion]."
+Add-Content $sFullPath ""
+Add-Content $sFullPath "***************************************************************************************************"
+Add-Content $sFullPath ""
 }
 }
 
@@ -117,53 +117,53 @@ Process{
 Try{
 Log-Start -LogPath $sLogPath -LogName $sLogName -ScriptVersion $sScriptVersion
 Write-Host "Closing League of Legends..."
-stop-process -processname LoLLauncher 
-stop-process -processname LoLClient 
-stop-process -processname "League of Legends" 
+stop-process -processname LoLLauncher
+stop-process -processname LoLClient
+stop-process -processname "League of Legends"
 cls
 Write-Host "Downloading files..."
 import-module bitstransfer
 Start-BitsTransfer http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012_Setup.exe
 cls
 Write-Host "Copying files..."
-start-process .\data\dxwebsetup.exe /q
-start-process .\Cg-3.1_April2012_Setup.exe /silent -wait
+start-process .\data\dxwebsetup.exe /q -Windowstyle Hidden
+start-process .\Cg-3.1_April2012_Setup.exe /silent -Windowstyle Hidden -wait
 Copy-Item "data\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources" 
-Copy-Item "data\Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0" 
+Copy-Item "data\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
+Copy-Item "data\Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
 
 
 if($env:PROCESSOR_ARCHITECTURE -eq "AMD64")
     {
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
-Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "${env:programfiles(x86)}\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
     }
     else
     {
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy" 
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"  
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"  
-Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy" 
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cg.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cgD3D9.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
+Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "RADS\projects\lol_launcher\releases\$launch\deploy"
 
     }
     cls
 Write-Host "Cleaning up..."
-if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe" /silent
-} 
-if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe" /silent
-} 
-$key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory" 
+if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins001.exe"))
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins001.exe"
+}
+if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins001.exe"))
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins001.exe"
+}
+$key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
 if ((Test-Path -path $key\uninst.exe))
 { start-process "$key\uninst.exe"
@@ -172,7 +172,6 @@ if ((Test-Path -path $key\uninst.exe))
 Write-Host "Starting LoL-Launcher..."
 start-process lol.launcher.exe
 cls
-Write-Host ""
 Write-Host "#              #       #######"                                   
 Write-Host "#        ####  #          #    #    # ######   ##   #    #  #### "
 Write-Host "#       #    # #          #    #    # #       #  #  #   #  #    " 
@@ -203,7 +202,7 @@ $no = New-Object System.Management.Automation.Host.ChoiceDescription "&restore"
 
 $options = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
 
-$result = $host.ui.PromptForChoice($title, $message, $options, 0) 
+$result = $host.ui.PromptForChoice($title, $message, $options, 0)
 
 switch ($result)
     {
@@ -213,20 +212,20 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUgBs0JMEdRGbPVzdQMgN0qHFQ
-# a9OgggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUmHWrtWo77r2XZFJZLSba8i/J
+# U6OgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
-# Fw0xNDA0MTMwNTE4MjVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
-# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsCyZqFcRzjkh
-# XBhHXhR4G2q0rck5OXU9j7ncGKu0n0lL7NG7R9bCB5J3MAT3DUojws+XMech6LkJ
-# UmdoLAbLaePQguowiAAYvlgpzjz/EV+1MVeauIIiwFMcmjctppRFve3gJh+Rv8Bs
-# jWkecRxhgBXM1pAFkrpFDwpQxozO7vUCAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
+# Fw0xNDA0MTMwOTQ3NTBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
+# U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA2PtBBa2VTkfb
+# Jal72nrPRcLXZ54rsDlk/Soc9olENJrXOyRX6ZnWi/YkvIx6NEbgBXO/zZ8RiLi6
+# jYkZdmfuG3JUOV8zRD3YxOIIQSuTX/sBRzwdnleFFcIYh3fhpleufkpFoR03NTOD
+# vBRtCE0uXwjqOLBTc63xite3kqtWUNsCAwEAAaN2MHQwEwYDVR0lBAwwCgYIKwYB
 # BQUHAwMwXQYDVR0BBFYwVIAQ5nF8jrl4ebXAMucz3ni5waEuMCwxKjAoBgNVBAMT
-# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQeZL6qsoR9apCoaX7
-# og9/QDAJBgUrDgMCHQUAA4GBAGbWwnMU+mYAIkrYA1245xfxz849gDYtAd+zXhaW
-# JHJpC10ac0Ybe0YhRtYPTHhIsRCC+1qitKHrlzymLRIB0DrxASfGiuoMtyBLmAFG
-# a8v8rmdsEEKEQFo2sWS4A3yvA8q3MtsCuwnlnO6eW3eTqboZo5e2FmgQmYmcs6th
-# GeMBMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
+# IVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdIIQq5c5HtmNCa9OCxcv
+# EPrkxzAJBgUrDgMCHQUAA4GBALMGY6jTJspUsdCOdzv5OdtFijI0kqNPD5hqlD9w
+# BA3yiObySuUFgdP5PLb2JB5/Y7WmmRW9/oT3saY5cP6/0+azrIEQ10S8R9STac/f
+# A0Dzi2qPe1YuGki9wEhEPs50K020GFOYUN8QTUfg3irGbnVzI7jDNpJBGZ2LpU6t
+# L7JGMIIEkzCCA3ugAwIBAgIQR4qO+1nh2D8M4ULSoocHvjANBgkqhkiG9w0BAQUF
 # ADCBlTELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExh
 # a2UgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQL
 # ExhodHRwOi8vd3d3LnVzZXJ0cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmly
@@ -251,24 +250,24 @@ switch ($result)
 # mOvNN7MOq2XTYuw6pXbrE6g1k8kuCgHswOjMPX626+LB7NMUkoJmh1Dc/VCXrLNK
 # dnMGxIYROrNfQwRSb+qz0HQ2TMrxG3mEN3BjrXS5qg7zmLCGCOvb4B+MEPI5ZJuu
 # TwoskopPGLWR5Y0ak18frvGm8C6X0NL2KzwxggOoMIIDpAIBATBAMCwxKjAoBgNV
-# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQXAthJ5hykaRJ
-# eUI8kMiLQDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
+# BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQpHN39fwu/o1I
+# hgtAQS8FnzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUzSBCStKTVTmGmRa3rw0Kir8HBhwwDQYJ
-# KoZIhvcNAQEBBQAEgYCM2uBbpUKq0uXzLMqNOFtIAnPvaHumqwXWsElOKXjcGSmo
-# us5NGC8gTlDUPhRv0VqbgUEBy/bT8cD18A11QZbVYR/eih3Q3cOFfw2itVahSpus
-# DdOP8W/Ys/N84c7hPITETRxZMSrD+830DLg8HL2ve14xMnQCmcGY8W7fusHWnaGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU5PY3onSmlbqEsItRm13d843TaoAwDQYJ
+# KoZIhvcNAQEBBQAEgYAxs7xroSbBaLXyFtUCQn0wR8ZkaWIhaa8nwt90p1RWBhzR
+# TG6BphGWLYdtcPlL519da36zS2KdyTG97g0DBj3M585IXW1WgGi3dt8/5UMKPn2E
+# EFtnmSURoL4dQ86X64dJ629KBY+IdUBo7ueVW7QUDSWhx7KbnrpOn8RHhz0emaGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwOTIyNTZaMCMGCSqGSIb3DQEJBDEWBBRI
-# t6CD0hmy6gv+bLBc0Nsc79czyzANBgkqhkiG9w0BAQEFAASCAQASkDOPqwZ3xXGu
-# WSM7GlhsbgNIIx6YGzi+LarDyCE2BhRaAhHpPQ/xQktPRIkL08N9NUlICENEAieP
-# ZiBh9i6F2YUMFxSzWXc83I1wc+Qt43e8O/mOSEVtg10+rBqrbLIP+bOU9h014qLQ
-# Pqg+j5AAFwrLQjWSnUtvUI8yDqC8a77LPPa8tW6u3qGrvG2qBVolDlHa7abTry5O
-# SbL/J/xqsIrgH9SzEsvNxBmNVNyhAQCjzdjOL5ZwxKopdQ4PAKcZv/5ro322VLK8
-# YoidrTAOUnE5vaB66z7AbuverP4noJEeZbmA73ADI8eoiMSADNXblaLJcjbEvMMc
-# UUe8B8QY
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwOTUzMzVaMCMGCSqGSIb3DQEJBDEWBBQn
+# 3G0nkL3GMYNZyYRzGeJxt11/NTANBgkqhkiG9w0BAQEFAASCAQCtmgIvHpsb6mp8
+# KTlh5rENPFqLNKjnlvJyhdiQAqNjcP7YrB074SAh0F/mhQoTEobozG2xWXSJ6b2T
+# gJ6zzAgjULVao4llkfR1yDh8L1bXKpGHnf2ev8ZKBeSTH5KCgR7NEoyW4jbtEGSs
+# InSk6XcCjGPyyLEDhglJy8v9MVX3W8WMtftb/qDvJ1xvPyntpmJlNtjwclhWu81u
+# +pMClEGC3fMEmmZm49unlC2a97NP4h1WpaT0KCPTj7Zon2lsS1/MNsQntA9zA46l
+# dA5BEcCPaVzGjO3KntoiOZJF8FuNH/pLlhu1a5IfVw+U1g9WO5o2kqnOPJHenH90
+# rnnf/brU
 # SIG # End signature block
