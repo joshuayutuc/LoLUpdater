@@ -3,7 +3,7 @@ LoLUpdater
 
 Right click .zip -> properties -> Unblock -> OK
 
-Put in the LoL folder then figure out how to execute the .ps1 script yourself.
+Put in the LoL folder then Use Powershell.exe to hax it to make it work
 
 Soon with a GUI
 
