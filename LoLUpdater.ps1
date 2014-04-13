@@ -1,8 +1,18 @@
-﻿$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
+﻿function Set-WindowTitle($text)
+
+{
+
+$Host.UI.RawUI.WindowTitle = $text
+
+}
+
+Set-Alias title Set-WindowTitle
+title LoLTweaker
+$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 $ErrorActionPreference = "SilentlyContinue"
-$sScriptVersion = "1.0"
+$sScriptVersion = "Beta 1"
 $sLogPath = "$dir"
-$sLogName = "LoLUpdater.log"
+$sLogName = "LoLTweaker.log"
 $sLogFile = $sLogPath + "\" + $sLogName
 
 pop-location
@@ -60,18 +70,6 @@ Write-Debug ""
 }
 }
 
-Function Log-Write{
-
-[CmdletBinding()]
-Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$LineValue)
-Process{
-Add-Content -Path $LogPath -Value $LineValue
-
-Write-Debug $LineValue
-}
-}
-
-$LineValue = "Success"
 Function Log-Error{
 
 [CmdletBinding()]
@@ -208,24 +206,6 @@ Break
 }
 }
 
-Function Log-Email{
-
-[CmdletBinding()]
-Param ([Parameter(Mandatory=$true)][string]$LogPath, [Parameter(Mandatory=$true)][string]$EmailFrom, [Parameter(Mandatory=$true)][string]$EmailTo, [Parameter(Mandatory=$true)][string]$EmailSubject)
-Process{
-Try{
-$sBody = (Get-Content $LogPath | out-string)
-
-$sSmtpServer = "smtp.gmail.com"
-$oSmtp = new-object Net.Mail.SmtpClient($sSmtpServer)
-$oSmtp.Send($EmailFrom, $EmailTo, $EmailSubject, $sBody)
-Exit 0
-}
-Catch{
-Exit 1
-}
-}
-}
 
 cls
 $message = "Do you want to patch or restore LoL to it's original state?"
@@ -246,8 +226,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUU9DEroO11OJAMCnHvWINSyWK
-# 5kigggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU+zUVwUpBHTuDgLwI7xWfb9Ju
+# 1qegggbUMIICOTCCAaagAwIBAgIQXAthJ5hykaRJeUI8kMiLQDAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwNTE4MjVaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAsCyZqFcRzjkh
@@ -287,21 +267,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQXAthJ5hykaRJ
 # eUI8kMiLQDAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUIk8h127GwKbiRsQZEm2+i+JxGnowDQYJ
-# KoZIhvcNAQEBBQAEgYAp7pFjyF+K4nQODAjx7ea8xD6V4RDhen2whcGcXTm+heS/
-# Mgmesgph0ljdSIu3M7QqM9iX8MZK1f137Zd/Ti9HkRcgkrE0/DjbmoqTnsB9Zc+d
-# 9xB1W78f8vZRSv74S6zSzurHCsnJsqKp8SVVeAwfvVBXH2983YtxPnC+iTH9t6GC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUA6iL2/p1XRFWx4RCyLdvMvdHjogwDQYJ
+# KoZIhvcNAQEBBQAEgYB/HSwq76onf29eulcDmd4OvbnkbYTjNcFqUe9VUVdhLE6Y
+# GmJe8iN6QJuD7WDEIq0wSJ6/CmZ9uhW/f+7AD1PLOXGy0jYaU4nDHVXICwOXaH36
+# dHXzEsZEzH/IOY0dAmdXQQo+/hZYatz1oJZC8sWeHfGEq/mJWTkWSUfJOsaVu6GC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwNjU4MTZaMCMGCSqGSIb3DQEJBDEWBBQL
-# O/Fg9MZIWXW/GlJojm3w2FLgeDANBgkqhkiG9w0BAQEFAASCAQBonSrzfzhVYo5S
-# X9wBqISfulTjRAEvU4lHpR53JgkbJCy/AU7yMGKh/i1r8FddR/A7gTZOaHQqzxZj
-# gzoXOg/3AE8i9kIjB6cP00ze4KCBjnzKCX6qeKwPr+kICWyfP4ZxQoL6K70bHkne
-# stqWAVj4B/1BnwLgTc/ymEvIRta6JzG1kRMrgXWgozoUGcp2+EQTv2fLBB2UElJB
-# nASOwc/PzqJ9WOlXgfyDTy5qcBgcbnDRs8boLXryXuJnngZ8kGJrmgO1RC1jFcbL
-# eFtH+meLPQzDjYLwy/CMg/Pjpb6mq0ZyMVl2BfvPu2UfLiC0OSo9iWrVTVjhlvWL
-# RGicARwm
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMwODEzNTBaMCMGCSqGSIb3DQEJBDEWBBSv
+# 7XRQfz0nUjH6lRq500wSnM3L+zANBgkqhkiG9w0BAQEFAASCAQAVEral50WIp4T7
+# rDWetbGZXWGKugQxS5sFMuZFhX1cLvBqXeNsoPPK0MTPEALjrspAtDQ5C0s5pb6B
+# hc/pfobQgwfRQuRtlychsDHIqi8O9yitYA0UzWc/ZLbAgTUbNeGiSu2z5x2HgyLQ
+# J/xRNIpvyR8e5CoZv5lP8LQBaYUpB1cIGbe7BXN5LMQ/9sD8ur6pIq1Vn2U6bpVA
+# 9JC52Rbp8793VVTg70blA411/Epq+3h+VDGOjPSQrvlOgG+DzumNIDhu000q3Tlt
+# My1MCGiHjQaOAT7SarpJeQreW16Mp6zTMxytHYVYeknrkMzcc0TXFQndPBOGO3W0
+# bO+MGJEd
 # SIG # End signature block
