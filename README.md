@@ -5,6 +5,8 @@ Just put in LoL folder and run.
 
 Soon with a GUI
 
+https://www.youtube.com/user/LogganSWE
+
 LoLUpdater OSX
 ==============
 Client fix for OSX (ingame coming soon)
