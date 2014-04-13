@@ -1,4 +1,8 @@
-﻿$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
+﻿Write-Host "Closing League of Legends..."
+stop-process -processname LoLLauncher
+stop-process -processname LoLClient
+
+$dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 pop-location
 push-location .\RADS\solutions\lol_game_client_sln\releases
 $sln = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
@@ -13,17 +17,21 @@ $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 
 cd $dir
 
-New-Item -ItemType directory -Path .\Backup
-Write-Host "Backing up..."
-Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll .\Backup
-Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll .\Backup
-Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe .\Backup
-Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll .\Backup
-Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" .\Backup
-Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" .\Backup
-Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll .\Backup
-Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll .\Backup
-Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll .\Backup
+if(-not (Test-Path -path .\Backup))
+{
+	New-Item -ItemType directory -Path .\Backup
+	Write-Host "Backing up..."
+	Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll .\Backup
+	Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll .\Backup
+	Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe .\Backup
+	Copy-Item .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BugSplat.dll .\Backup
+	Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Adobe Air.dll" .\Backup
+	Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources\NPSWF32.dll" .\Backup
+	Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll .\Backup
+	Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll .\Backup
+	Copy-Item .\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll .\Backup
+}
+
 
 Function restore {
 Write-Host "Restoring..."
@@ -34,7 +42,7 @@ Copy-Item .\backup\cggl.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\d
 Copy-Item .\backup\tbb.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
 Copy-Item .\backup\BsSndRpt.exe .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
 Copy-Item .\backup\BugSplat.dll .\RADS\solutions\lol_game_client_sln\releases\$sln\deploy
-Copy-Item .\backup\Adobe Air.dll "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "backup\Adobe Air.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
 Copy-Item .\backup\NPSWF32.dll "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\resources"
 Copy-Item .\backup\cg.dll .\RADS\projects\lol_launcher\releases\$launch\deploy
 Copy-Item .\backup\cgD3D9.dll .\RADS\projects\lol_launcher\releases\$launch\deploy
@@ -44,10 +52,6 @@ exit
 }
 
 Function patch{
-Write-Host "Closing League of Legends..."
-stop-process -processname LoLLauncher
-stop-process -processname LoLClient
-stop-process -processname "League of Legends"
 cls
 Write-Host "Downloading files..."
 import-module bitstransfer
@@ -83,13 +87,8 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" .\RADS\projects
 
     }
     cls
-Write-Host "Cleaning up..."
-if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins000.exe"
-}
-if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins000.exe"
-}
+	Write-Host "Cleaning up..."
+
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
 if ((Test-Path -path $key\uninst.exe))
