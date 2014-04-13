@@ -30,7 +30,7 @@ Copy-Item "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
 Copy-Item "RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
-start-process data\dxwsetup.exe /q
+start-process dxwsetup.exe /q
 
 Function Log-Start{
 
@@ -86,7 +86,7 @@ Exit
 
 Function restore {
 Write-Host "Restoring..."
-Copy-ISet-AuthenticodeSignature C:\Users\Loggan\Documents\GitHub\LoLUpdater\lolupdater.ps1 @(Get-ChildItem cert:\CurrentUser\My -codesigning)[0] -timestampserver http://timestamp.comodoca.com/authenticodetem "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "backup\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cg.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cgD3D9.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "backup\cggl.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -118,12 +118,12 @@ Start-BitsTransfer http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April20
 cls
 Write-Host "Copying files..."
 start-process .\Cg-3.1_April2012_Setup.exe /silent -Windowstyle Hidden -wait
-Copy-Item "data\BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
-Copy-Item "data\NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Resources"
-Copy-Item "data\Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
+Copy-Item "BsSndRpt.exe" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "BugSplat.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "dbghelp.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "tbb.dll" "RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
+Copy-Item "NPSWF32.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0\Resources"
+Copy-Item "Adobe AIR.dll" "RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Versions\1.0"
 
 
 if($env:PROCESSOR_ARCHITECTURE -eq "AMD64")
