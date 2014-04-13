@@ -1,6 +1,8 @@
 LoLUpdater
 ==========
 
+Right click .zip -> properties -> Unblock -> OK
+
 Just put in LoL folder and run.
 
 Soon with a GUI
