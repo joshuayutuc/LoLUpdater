@@ -3,7 +3,7 @@ LoLUpdater
 
 Right click .zip -> properties -> Unblock -> OK
 
-Just put in LoL folder and run.
+Put in the LoL folder then figure out how to execute the .ps1 script yourself.
 
 Soon with a GUI
 
