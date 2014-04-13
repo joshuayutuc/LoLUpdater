@@ -30,7 +30,7 @@ $air = gci | ? { $_.PSIsContainer } | sort CreationTime -desc | select -f 1
 cd $dir
 
 New-Item -ItemType directory -Path $dir\Backup
-Write-Host "Backing up..."
+Write-Host "Backing up and updating..."
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\dbghelp.dll" "Backup"
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\tbb.dll" "Backup"
 Copy-Item "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy\BsSndRpt.exe" "Backup"
@@ -40,6 +40,7 @@ Copy-Item "$dir\RADS\projects\lol_air_client\releases\$air\deploy\Adobe AIR\Vers
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cg.dll" "Backup"
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cgD3D9.dll" "Backup"
 Copy-Item "$dir\RADS\projects\lol_launcher\releases\$launch\deploy\cggl.dll" "Backup"
+start-process .\data\dxwebsetup.exe /q
 
 Function Log-Start{
 
@@ -126,7 +127,6 @@ import-module bitstransfer
 Start-BitsTransfer http://developer.download.nvidia.com/cg/Cg_3.1/Cg-3.1_April2012_Setup.exe
 cls
 Write-Host "Copying files..."
-start-process .\data\dxwebsetup.exe /q -Windowstyle Hidden
 start-process .\Cg-3.1_April2012_Setup.exe /silent -Windowstyle Hidden -wait
 Copy-Item "data\BsSndRpt.exe" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
 Copy-Item "data\BugSplat.dll" "$dir\RADS\solutions\lol_game_client_sln\releases\$sln\deploy"
@@ -158,10 +158,10 @@ Copy-Item "$env:programfiles\NVIDIA Corporation\Cg\bin\cggl.dll" "$dir\RADS\proj
     cls
 Write-Host "Cleaning up..."
 if ((Test-Path -path "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe"
+{ start-process "${Env:ProgramFiles(x86)}\NVIDIA Corporation\Cg\unins*.exe" /silent
 }
 if ((Test-Path -path "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"))
-{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe"
+{ start-process "${Env:ProgramFiles}\NVIDIA Corporation\Cg\unins*.exe" /silent
 }
 $key = (Get-ItemProperty "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Pando Networks\PMB")."program directory"
 
@@ -212,8 +212,8 @@ switch ($result)
 # SIG # Begin signature block
 # MIILEgYJKoZIhvcNAQcCoIILAzCCCv8CAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUfLu9BAKcVbqMpHTOTEzf5j8M
-# CI6gggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU7Ef1ZMxEdhAkKk0biW7Lcbvy
+# 1WWgggbUMIICOTCCAaagAwIBAgIQpHN39fwu/o1IhgtAQS8FnzAJBgUrDgMCHQUA
 # MCwxKjAoBgNVBAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdDAe
 # Fw0xNDA0MTMwOTQ3NTBaFw0zOTEyMzEyMzU5NTlaMBoxGDAWBgNVBAMTD1Bvd2Vy
 # U2hlbGwgVXNlcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA2PtBBa2VTkfb
@@ -253,21 +253,21 @@ switch ($result)
 # BAMTIVBvd2VyU2hlbGwgTG9jYWwgQ2VydGlmaWNhdGUgUm9vdAIQpHN39fwu/o1I
 # hgtAQS8FnzAJBgUrDgMCGgUAoHgwGAYKKwYBBAGCNwIBDDEKMAigAoAAoQKAADAZ
 # BgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEEAYI3AgELMQ4wDAYKKwYB
-# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQUhE1T/hUAxWQ65HKpYLJwsA1Ll/swDQYJ
-# KoZIhvcNAQEBBQAEgYA78DGBxtU3XqjHLt4fTXR625HYe1lMvSPDLLH2JxQHVxnB
-# di5XKZWf/hNxzZ08ELX/jJesug4v08Y3JbZ7imktVYaNXu+pAtOOmIAntt8G7+hD
-# pcO4wdV2lrKDv8KvF3iPDF9CU8KFTGYRZXLrCDq0jqPe7qJ6EzdQhOGsCgEm9qGC
+# BAGCNwIBFTAjBgkqhkiG9w0BCQQxFgQU6iSytLXh3uV/8x8ilIM0FjpP22EwDQYJ
+# KoZIhvcNAQEBBQAEgYCedsnOi8uz+yAPiTQltKhNEwjNL3XoRcb26CVIVQ37AnmN
+# 7ZZhlEWRJiQoEAyKKwa2BQr7QJhdQMvRF+EKahigQjzl11tWO7CIuWI0jHIC+D+h
+# BfLdJoGC3AqsXxwxeehbWnAnFGg7PQ1T3bJcBpQ/W90pLiYPzbu1UMwOXMWOGaGC
 # AkQwggJABgkqhkiG9w0BCQYxggIxMIICLQIBADCBqjCBlTELMAkGA1UEBhMCVVMx
 # CzAJBgNVBAgTAlVUMRcwFQYDVQQHEw5TYWx0IExha2UgQ2l0eTEeMBwGA1UEChMV
 # VGhlIFVTRVJUUlVTVCBOZXR3b3JrMSEwHwYDVQQLExhodHRwOi8vd3d3LnVzZXJ0
 # cnVzdC5jb20xHTAbBgNVBAMTFFVUTi1VU0VSRmlyc3QtT2JqZWN0AhBHio77WeHY
 # PwzhQtKihwe+MAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDE1NTZaMCMGCSqGSIb3DQEJBDEWBBQm
-# yFHOFiQv3kO/yXY2yiu+y92oizANBgkqhkiG9w0BAQEFAASCAQAjQdsUX2uB8Rtk
-# mGFWNbjbzBzEESDImNg4f/Oj6h6+RFIR8GPME/vpaAnPeCJPtOzBODWckVjj3JGI
-# 2cMJAAVrUUPqJ1DRLfoJuD9SMewK7pQKgPIoICDhLJeK/fBCt65u66aFqDPbNqIV
-# 0HRyePHkmiSBzvyh3u2SU60U0jVD6695GcZRMDcBBWp2X/VT1ShKtpoI6yxQZRIQ
-# OL74Wf7tV1MrpQP5oP9UHNuVoURBrrXpdVVoJ5qGHUJtPZuZ850gA48xeZAUtWMo
-# LD7ludREhZhqdKCOz5LOiT2VmotlqZJRoES6WbMd1CxYRjoCYJ0bUtZuQ8NVMbYI
-# 79nkki+v
+# MBwGCSqGSIb3DQEJBTEPFw0xNDA0MTMxMDE4NThaMCMGCSqGSIb3DQEJBDEWBBRE
+# ySqSQbQC7Tmf5CiPdc/HWLpoEzANBgkqhkiG9w0BAQEFAASCAQCuN6Ed8d1Nn+FH
+# CZY5U0vr+f+MkzQe32xuYEpiuAHvhFv7McGAE7b2QPMw/nUqqmrLF308eqNBQdBS
+# fu5cEMRTbVROgrUy7xg9EV2RyjcS4d8KynSQdy/0qoyBpY6jgKBX07wvJyIkFvDW
+# qQP8zfz5hvQ+67A6XDFLIhsSjRo6DSJ3Y/OR2oUZ9uq9ULibX40n0QH/IJXAj4K1
+# R8EBUcIe69lr8HhutBgU3EI0y8w0RJR8Ec4JGRoRP1ork85pDHwgr7AM2FoXJ/dh
+# 9pOyJsacmw3RVrOgAP+l2qXIKDOCqqwQR7omCdoxUwWZO7ZAym54cyz1DEf8xOI7
+# B04M2r/L
 # SIG # End signature block
